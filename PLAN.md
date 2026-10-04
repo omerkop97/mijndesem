@@ -156,10 +156,10 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [x] 1.6 SEO-basis: meta tags, Open Graph, favicon, `sitemap.xml`, `robots.txt`.
 
 ### Fase 2: Content-model
-- [ ] 2.1 Collection `breads` (naam, slug, beschrijving, smaakprofiel, ingrediënten, allergenen, prijs, gewicht, foto's).
-- [ ] 2.2 Collection `extras` (naam, groep: zaden/vruchten-noten, meerprijs, allergenen, samenstelling bij mixen). Alles combineerbaar op alle broden, inclusief de combiregel voor rozijnen + hazelnoten.
-- [ ] 2.3 Collections `faq`, `reviews`.
-- [ ] 2.4 Instellingen `ordering`: minimale doorlooptijd (3 dagen), bakdagen (ma t/m zo), dichte dagen/vakantie, optioneel een max. aantal per dag.
+- [x] 2.1 Collection `breads` (naam, slug, beschrijving, smaakprofiel, ingrediënten, allergenen, prijs, gewicht, foto's).
+- [x] 2.2 Collection `extras` (naam, groep: zaden/vruchten-noten, meerprijs, allergenen, samenstelling bij mixen). Alles combineerbaar op alle broden, inclusief de combiregel voor rozijnen + hazelnoten.
+- [x] 2.3 Collections `faq`, `reviews`.
+- [x] 2.4 Instellingen `ordering`: minimale doorlooptijd (3 dagen), bakdagen (ma t/m zo), dichte dagen/vakantie, optioneel een max. aantal per dag.
 
 ### Fase 3: Pagina's
 - [ ] 3.1 Homepage (alle secties uit §5).
@@ -236,7 +236,7 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 
 ## 10. Nog openstaande vragen
 
-1. **Mix van zaden**: welke 4 van de 5 zaden zitten erin? (Nodig voor de allergenen: sesam wel of niet.)
-2. **Gewicht/formaat** per brood (bijv. ca. 750 g)?
-3. Heeft de starter een **naam**? (Leuk voor het verhaal.)
+1. ~~Mix van zaden~~: mix van de losse zaden; voor de zekerheid wordt sesam als allergeen vermeld.
+2. ~~Gewicht~~: niet vermeld.
+3. ~~Naam starter~~: geen naam.
 4. **Domeinnaam** al geregeld? **KvK/NVWA** al rond?

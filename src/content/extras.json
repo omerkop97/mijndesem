@@ -1,0 +1,41 @@
+[
+  { "id": "zonnebloempitten", "naam": "Zonnebloempitten", "groep": "zaden", "prijs": 50, "volgorde": 1 },
+  { "id": "pompoenpitten", "naam": "Pompoenpitten", "groep": "zaden", "prijs": 50, "volgorde": 2 },
+  { "id": "chiazaden", "naam": "Chiazaden", "groep": "zaden", "prijs": 50, "volgorde": 3 },
+  { "id": "maanzaden", "naam": "Maanzaden", "groep": "zaden", "prijs": 50, "volgorde": 4 },
+  { "id": "sesam", "naam": "Sesam", "groep": "zaden", "prijs": 50, "volgorde": 5, "allergenen": ["sesam"] },
+  {
+    "id": "mix-van-zaden",
+    "naam": "Mix van zaden",
+    "groep": "zaden",
+    "prijs": 150,
+    "volgorde": 6,
+    "allergenen": ["sesam"],
+    "omschrijving": "Een mix van onze zaden en pitten"
+  },
+  {
+    "id": "rozijnen",
+    "naam": "Rozijnen",
+    "groep": "vruchten-noten",
+    "prijs": 100,
+    "volgorde": 7
+  },
+  {
+    "id": "hazelnoten",
+    "naam": "Hazelnoten",
+    "groep": "vruchten-noten",
+    "prijs": 100,
+    "volgorde": 8,
+    "allergenen": ["noten-hazelnoot"]
+  },
+  {
+    "id": "rozijnen-hazelnoten",
+    "naam": "Rozijnen en hazelnoten",
+    "groep": "vruchten-noten",
+    "prijs": 175,
+    "volgorde": 9,
+    "allergenen": ["noten-hazelnoot"],
+    "combineert": ["rozijnen", "hazelnoten"],
+    "omschrijving": "Samen voordeliger"
+  }
+]

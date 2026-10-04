@@ -1,0 +1,60 @@
+[
+  {
+    "id": "waarom-3-dagen",
+    "volgorde": 1,
+    "opHome": true,
+    "vraag": "Waarom moet ik 3 dagen van tevoren bestellen?",
+    "antwoord": "Echt zuurdesembrood laat zich niet haasten. Eerst wordt de starter gevoed zodat hij op zijn sterkst is. Daarna wordt het deeg gemaakt, dat langzaam mag rijzen, en pas dan gaat het de oven in. Die tijd zorgt voor de smaak, de mooie korst en een brood dat beter verteerbaar is."
+  },
+  {
+    "id": "hoe-bestellen",
+    "volgorde": 2,
+    "opHome": true,
+    "vraag": "Hoe bestel ik?",
+    "antwoord": "Stel je brood samen op de bestelpagina, kies de dag waarop je het wilt ophalen en verstuur je bestelling. Je krijgt een bevestiging en we spreken samen een ophaaltijd af."
+  },
+  {
+    "id": "ophalen",
+    "volgorde": 3,
+    "opHome": true,
+    "vraag": "Waar en wanneer kan ik ophalen?",
+    "antwoord": "Ophalen kan elke dag van de week in Zevenaar. Het exacte adres krijg je in de bevestiging, en de ophaaltijd stemmen we samen af. Bezorgen is (nog) niet mogelijk."
+  },
+  {
+    "id": "betalen",
+    "volgorde": 4,
+    "opHome": true,
+    "vraag": "Hoe kan ik betalen?",
+    "antwoord": "Je kunt vooraf betalen via een Tikkie die je van ons ontvangt, of contant bij het ophalen. Wat jij het fijnst vindt."
+  },
+  {
+    "id": "extras-combineren",
+    "volgorde": 5,
+    "vraag": "Kan ik extra's combineren?",
+    "antwoord": "Ja, alle extra's zijn te combineren op elk brood. Losse pitten en zaden kosten € 0,50 per soort, de mix van zaden € 1,50. Rozijnen of hazelnoten kosten € 1,00, samen betaal je € 1,75."
+  },
+  {
+    "id": "wat-is-zuurdesem",
+    "volgorde": 6,
+    "vraag": "Wat is zuurdesem eigenlijk?",
+    "antwoord": "Zuurdesem is een levend rijsmiddel van alleen meel en water, waarin natuurlijke gisten en melkzuurbacteriën leven. Er gaat geen bakkersgist in het brood. De starter van Mijn Desem is helemaal zelf gekweekt en wordt elke dag verzorgd."
+  },
+  {
+    "id": "bewaren",
+    "volgorde": 7,
+    "vraag": "Hoe bewaar ik mijn brood het best?",
+    "antwoord": "Bewaar het brood met het snijvlak naar beneden op een plank, of in een linnen broodzak, op kamertemperatuur. Zuurdesembrood blijft van nature langer vers dan gewoon brood. Invriezen kan ook prima: snijd het dan eerst in plakken."
+  },
+  {
+    "id": "allergenen",
+    "volgorde": 8,
+    "vraag": "Is het brood geschikt bij een allergie?",
+    "antwoord": "Alle broden bevatten gluten. Sommige extra's bevatten sesam of hazelnoot. Omdat alles in één (thuis)keuken wordt gemaakt, kunnen sporen van andere allergenen niet worden uitgesloten. Bekijk de allergenenpagina of neem bij twijfel contact op."
+  },
+  {
+    "id": "annuleren",
+    "volgorde": 9,
+    "vraag": "Kan ik mijn bestelling wijzigen of annuleren?",
+    "antwoord": "Neem zo snel mogelijk contact op. Omdat de starter al drie dagen van tevoren wordt klaargezet voor jouw brood, kunnen we een bestelling niet meer kosteloos annuleren zodra het deeg is gemaakt."
+  }
+]
