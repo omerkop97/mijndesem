@@ -1,0 +1,492 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Container from '@/components/Container.astro';
+import BestelMoment from '@/components/BestelMoment.astro';
+import HeartIcon from '@/components/HeartIcon.astro';
+import { getBroden, getExtrasInfo } from '@/lib/catalogus';
+import { formatEuro, formatMeerprijs } from '@/lib/prijs';
+import { MAX_AANTAL, type Catalogus } from '@/lib/mandje';
+import { bestelKanaal, site } from '@/data/site';
+
+const broden = await getBroden();
+const extras = await getExtrasInfo();
+const catalogus: Catalogus = {
+  broden: broden.map((b) => ({ id: b.id, naam: b.data.naam, prijs: b.data.prijs })),
+  extras: extras.map(({ id, naam, prijs, combineert }) => ({ id, naam, prijs, combineert })),
+};
+const config = {
+  web3formsKey: bestelKanaal.web3formsKey,
+  whatsapp: site.whatsapp,
+  dev: import.meta.env.DEV,
+};
+const groepen = [
+  { id: 'zaden', titel: 'Pitten en zaden' },
+  { id: 'vruchten-noten', titel: 'Rozijnen en noten' },
+] as const;
+
+const stapKop = 'flex items-center gap-3 font-serif text-2xl';
+const stapNr =
+  'bg-roest text-meel flex size-8 shrink-0 items-center justify-center rounded-full font-sans text-sm font-semibold';
+const veld =
+  'border-notenhout/15 bg-meel focus:border-roest focus:ring-roest/20 mt-1.5 block w-full rounded-xl border px-4 py-3 outline-none focus:ring-4';
+---
+
+<BaseLayout
+  title="Bestellen"
+  description={`Stel je eigen zuurdesembrood samen en kies je ophaaldag. Ophalen in ${site.city}, betalen via Tikkie of contant.`}
+>
+  <PaginaKop eyebrow="Vers voor jou gebakken" titel="Stel je brood samen">
+    <BestelMoment />
+  </PaginaKop>
+
+  <Container size="breed" class="grid gap-10 pb-24 lg:grid-cols-12 lg:gap-x-12">
+    <!-- Stap 1 t/m 3: configurator -->
+    <form id="configurator" class="space-y-12 lg:col-span-7 lg:row-start-1" novalidate>
+      <fieldset>
+        <legend class={stapKop}><span class={stapNr}>1</span>Kies je brood</legend>
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          {
+            broden.map((b, i) => (
+              <label class="border-notenhout/10 bg-meel hover:border-roest/40 has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-3 pr-5 transition-colors has-[:focus-visible]:ring-4">
+                <input
+                  type="radio"
+                  name="brood"
+                  value={b.id}
+                  class="peer sr-only"
+                  checked={i === 0}
+                  required
+                />
+                <Image src={b.data.foto} alt="" width={128} class="size-16 shrink-0 rounded-full object-cover" />
+                <span class="flex-1">
+                  <span class="block font-medium">{b.data.naam.replace(' Zuurdesem Brood', '')}</span>
+                  <span class="text-notenhout-zacht block text-sm">{b.data.smaak.slice(0, 2).join(', ')}</span>
+                </span>
+                <span class="font-medium tabular-nums">{formatEuro(b.data.prijs)}</span>
+                <HeartIcon class="text-roest absolute top-2 right-2 size-3.5 opacity-0 transition-opacity peer-checked:opacity-100" />
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class={stapKop}><span class={stapNr}>2</span>Maak het jouw brood</legend>
+        <p class="text-notenhout-zacht mt-2">Optioneel. Alles is te combineren; de meerprijs geldt per brood.</p>
+        <div class="mt-6 space-y-6">
+          {
+            groepen.map((g) => (
+              <div>
+                <p class="mb-3 text-sm font-semibold tracking-[0.12em] uppercase">{g.titel}</p>
+                <div class="flex flex-wrap gap-2">
+                  {extras
+                    .filter((e) => e.groep === g.id)
+                    .map((e) => (
+                      <label class="border-notenhout/15 bg-meel hover:border-roest/50 has-[:checked]:bg-roest has-[:checked]:text-meel has-[:checked]:border-roest has-[:focus-visible]:ring-roest/30 inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors select-none has-[:focus-visible]:ring-4">
+                        <input type="checkbox" name="extra" value={e.id} class="sr-only" />
+                        {e.naam}
+                        <span class="opacity-70">{formatMeerprijs(e.prijs)}</span>
+                      </label>
+                    ))}
+                </div>
+              </div>
+            ))
+          }
+          <p id="combi-hint" class="text-klimop hidden text-sm" role="status">
+            Rozijnen en hazelnoten samen zijn voordeliger. We hebben de combinatie voor je gekozen.
+          </p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend class={stapKop}><span class={stapNr}>3</span>Hoeveel?</legend>
+        <div class="mt-6 flex flex-wrap items-center gap-4 sm:gap-6">
+          <div class="border-notenhout/15 bg-meel inline-flex items-center rounded-full border">
+            <button type="button" data-aantal="-1" class="hover:text-roest size-12 rounded-full text-xl" aria-label="Eén minder">−</button>
+            <input
+              id="aantal"
+              name="aantal"
+              type="number"
+              inputmode="numeric"
+              min="1"
+              max={MAX_AANTAL}
+              value="1"
+              class="w-12 [appearance:textfield] bg-transparent text-center text-lg font-medium outline-none [&::-webkit-inner-spin-button]:appearance-none"
+              aria-label="Aantal broden"
+            />
+            <button type="button" data-aantal="1" class="hover:text-roest size-12 rounded-full text-xl" aria-label="Eén meer">+</button>
+          </div>
+          <p class="text-notenhout-zacht">
+            <span id="regel-prijs" class="text-notenhout text-2xl font-medium tabular-nums">{formatEuro(broden[0].data.prijs)}</span>
+          </p>
+          <button
+            type="submit"
+            class="bg-roest text-meel hover:bg-roest-donker shadow-zacht inline-flex h-12 items-center gap-2 rounded-full px-7 font-medium transition-colors sm:ml-auto"
+          >
+            Voeg toe aan bestelling
+          </button>
+        </div>
+      </fieldset>
+    </form>
+
+    <!-- Mandje -->
+    <aside
+      class="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1"
+      aria-labelledby="mandje-titel"
+    >
+      <div class="bg-meel-warm shadow-zacht rounded-[var(--radius-kaart)] p-6 sm:p-8 lg:sticky lg:top-28">
+        <h2 id="mandje-titel" class="font-serif text-2xl">Jouw bestelling</h2>
+        <p id="mandje-leeg" class="text-notenhout-zacht mt-4">
+          Nog leeg. Kies een brood en voeg het toe.
+        </p>
+        <ul id="mandje-lijst" class="divide-notenhout/10 mt-4 divide-y" aria-live="polite"></ul>
+        <div id="mandje-totaal" class="border-notenhout/15 mt-2 hidden items-baseline justify-between border-t pt-4">
+          <span class="font-semibold">Totaal</span>
+          <span id="totaal-bedrag" class="text-2xl font-semibold tabular-nums"></span>
+        </div>
+        <ul class="text-notenhout-zacht mt-6 space-y-1.5 text-sm">
+          <li class="flex gap-2"><HeartIcon class="text-roest mt-1 size-3 shrink-0" />Ophalen in {site.city}, tijd in overleg</li>
+          <li class="flex gap-2"><HeartIcon class="text-roest mt-1 size-3 shrink-0" />Betalen via Tikkie of contant</li>
+        </ul>
+      </div>
+    </aside>
+
+    <!-- Stap 4: gegevens -->
+    <form
+      id="bestelformulier"
+      class="border-linnen space-y-6 border-t pt-12 lg:col-span-7 lg:row-start-2"
+      novalidate
+    >
+      <h2 class={stapKop}><span class={stapNr}>4</span>Jouw gegevens</h2>
+
+      <div class="grid gap-5 sm:grid-cols-2">
+        <label class="block sm:col-span-2">
+          <span class="text-sm font-medium">Naam</span>
+          <input name="naam" required autocomplete="name" class={veld} />
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium">E-mailadres</span>
+          <input name="email" type="email" required autocomplete="email" class={veld} />
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium">Telefoon (WhatsApp)</span>
+          <input name="telefoon" type="tel" required autocomplete="tel" pattern="[0-9 +()\-]{10,}" class={veld} />
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium">Ophaaldag</span>
+          <input id="ophaaldag" name="ophaaldag" type="date" required class={veld} />
+          <span id="ophaaldag-tekst" class="text-notenhout-zacht mt-1 block text-sm"></span>
+        </label>
+        <label class="block">
+          <span class="text-sm font-medium">Voorkeurstijd <span class="text-notenhout-zacht font-normal">(optioneel)</span></span>
+          <input name="voorkeurstijd" placeholder="bijv. na 17:00" class={veld} />
+        </label>
+      </div>
+
+      <fieldset>
+        <legend class="text-sm font-medium">Hoe wil je betalen?</legend>
+        <div class="mt-2 grid gap-3 sm:grid-cols-2">
+          {
+            [
+              { v: 'tikkie', t: 'Via Tikkie', s: 'Je ontvangt een betaalverzoek' },
+              { v: 'contant', t: 'Contant', s: 'Bij het ophalen' },
+            ].map((o, i) => (
+              <label class="border-notenhout/15 bg-meel has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 flex cursor-pointer items-start gap-3 rounded-xl border p-4 has-[:focus-visible]:ring-4">
+                <input type="radio" name="betaalwijze" value={o.v} checked={i === 0} class="accent-roest mt-1" />
+                <span>
+                  <span class="block font-medium">{o.t}</span>
+                  <span class="text-notenhout-zacht text-sm">{o.s}</span>
+                </span>
+              </label>
+            ))
+          }
+        </div>
+      </fieldset>
+
+      <label class="block">
+        <span class="text-sm font-medium">Opmerking <span class="text-notenhout-zacht font-normal">(optioneel)</span></span>
+        <textarea name="opmerking" rows="3" class={veld} placeholder="Bijvoorbeeld een allergie of een speciaal verzoek"></textarea>
+      </label>
+
+      <!-- Honeypot tegen spam -->
+      <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+      <p class="text-notenhout-zacht text-sm">
+        Door te bestellen ga je akkoord met de <a href="/voorwaarden" class="text-roest underline underline-offset-4">voorwaarden</a>.
+        Bekijk ook de <a href="/allergenen" class="text-roest underline underline-offset-4">allergeneninformatie</a>.
+      </p>
+
+      <div id="form-melding" class="hidden rounded-xl p-4 text-sm" role="alert"></div>
+
+      <div class="flex flex-wrap items-center gap-4">
+        <button
+          id="verstuur"
+          type="submit"
+          class="bg-roest text-meel hover:bg-roest-donker shadow-zacht inline-flex h-13 items-center gap-2 rounded-full px-8 text-base font-medium transition-colors disabled:cursor-wait disabled:opacity-60"
+        >
+          Plaats bestelling
+        </button>
+        {
+          config.whatsapp && config.web3formsKey && (
+            <button id="via-whatsapp" type="button" class="text-roest font-medium underline underline-offset-4">
+              of verstuur via WhatsApp
+            </button>
+          )
+        }
+      </div>
+    </form>
+  </Container>
+
+  <script type="application/json" id="catalogus" set:html={JSON.stringify(catalogus)} />
+  <script type="application/json" id="bestel-config" set:html={JSON.stringify(config)} />
+</BaseLayout>
+
+<script>
+  import { formatEuro, normaliseerExtras, prijsPerBrood } from '@/lib/prijs';
+  import { eersteOphaaldag, formatDatum, isoDatum, ophaaldagToegestaan } from '@/lib/bestellen';
+  import {
+    MAX_AANTAL,
+    bestelTekst,
+    bewaarMandje,
+    laadMandje,
+    regelOmschrijving,
+    regelPrijs,
+    schoonMandje,
+    totaal,
+    voegToe,
+    type Catalogus,
+    type Klant,
+    type Regel,
+  } from '@/lib/mandje';
+
+  const cat: Catalogus = JSON.parse(document.getElementById('catalogus')!.textContent!);
+  const config: { web3formsKey: string; whatsapp: string; dev: boolean } = JSON.parse(
+    document.getElementById('bestel-config')!.textContent!,
+  );
+
+  const $ = <T extends HTMLElement>(id: string) => document.getElementById(id) as T;
+  const configurator = $<HTMLFormElement>('configurator');
+  const formulier = $<HTMLFormElement>('bestelformulier');
+  const aantalInput = $<HTMLInputElement>('aantal');
+  const extraBoxes = [...configurator.querySelectorAll<HTMLInputElement>('input[name=extra]')];
+
+  let mandje: Regel[] = schoonMandje(laadMandje(), cat);
+
+  // ---------- Configurator ----------
+  const params = new URLSearchParams(location.search);
+  const voorkeur = params.get('brood');
+  if (voorkeur) {
+    const radio = configurator.querySelector<HTMLInputElement>(`input[name=brood][value="${CSS.escape(voorkeur)}"]`);
+    if (radio) radio.checked = true;
+  }
+
+  const gekozenBrood = () => configurator.querySelector<HTMLInputElement>('input[name=brood]:checked')?.value ?? '';
+  const gekozenExtras = () => extraBoxes.filter((b) => b.checked).map((b) => b.value);
+  const leesAantal = () => Math.min(MAX_AANTAL, Math.max(1, parseInt(aantalInput.value, 10) || 1));
+
+  function werkRegelPrijsBij() {
+    const brood = cat.broden.find((b) => b.id === gekozenBrood());
+    if (!brood) return;
+    $('regel-prijs').textContent = formatEuro(prijsPerBrood(brood.prijs, gekozenExtras(), cat.extras) * leesAantal());
+  }
+
+  // Combi-regel zichtbaar maken: losse rozijnen + hazelnoten => combi, combi => losse uit.
+  configurator.addEventListener('change', (e) => {
+    const doel = e.target as HTMLInputElement;
+    if (doel.name === 'extra') {
+      const voor = gekozenExtras();
+      const na = normaliseerExtras(voor, cat.extras);
+      const werdCombi = na.some((id) => !voor.includes(id));
+      extraBoxes.forEach((b) => (b.checked = na.includes(b.value)));
+      $('combi-hint').classList.toggle('hidden', !werdCombi);
+    }
+    werkRegelPrijsBij();
+  });
+
+  configurator.querySelectorAll<HTMLButtonElement>('[data-aantal]').forEach((knop) =>
+    knop.addEventListener('click', () => {
+      aantalInput.value = String(Math.min(MAX_AANTAL, Math.max(1, leesAantal() + Number(knop.dataset.aantal))));
+      werkRegelPrijsBij();
+    }),
+  );
+  aantalInput.addEventListener('input', werkRegelPrijsBij);
+  aantalInput.addEventListener('blur', () => (aantalInput.value = String(leesAantal())));
+
+  configurator.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const brood = gekozenBrood();
+    if (!brood) return;
+    mandje = voegToe(mandje, { brood, extras: gekozenExtras(), aantal: leesAantal() }, cat);
+    bewaarMandje(mandje);
+    // Configurator terugzetten voor het volgende brood
+    extraBoxes.forEach((b) => (b.checked = false));
+    aantalInput.value = '1';
+    $('combi-hint').classList.add('hidden');
+    werkRegelPrijsBij();
+    toonMandje(true);
+    // Op mobiel staat het mandje onder de configurator: laat zien dat het gelukt is
+    if (matchMedia('(max-width: 1023px)').matches) {
+      $('mandje-titel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  // ---------- Mandje ----------
+  function toonMandje(net = false) {
+    const lijst = $('mandje-lijst');
+    lijst.replaceChildren(
+      ...mandje.map((r, i) => {
+        const { brood, extras } = regelOmschrijving(r, cat);
+        const li = document.createElement('li');
+        li.className = 'flex items-start gap-4 py-4' + (net && i === mandje.length - 1 ? ' animate-rijzen' : '');
+        li.innerHTML = `
+          <span class="bg-meel flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-sm font-semibold tabular-nums"></span>
+          <span class="flex-1"><span class="block font-medium"></span><span class="text-notenhout-zacht block text-sm"></span></span>
+          <span class="font-medium tabular-nums"></span>
+          <button type="button" class="text-notenhout/50 hover:text-roest -mr-1 size-7 rounded-full" aria-label="Verwijder">✕</button>`;
+        const [aantal, tekst, prijs, weg] = li.children as unknown as HTMLElement[];
+        aantal.textContent = `${r.aantal}×`;
+        tekst.children[0].textContent = brood.replace(' Zuurdesem Brood', '');
+        tekst.children[1].textContent = extras ? `met ${extras.toLowerCase()}` : 'naturel';
+        prijs.textContent = formatEuro(regelPrijs(r, cat));
+        weg.setAttribute('aria-label', `Verwijder ${brood}`);
+        weg.addEventListener('click', () => {
+          mandje = mandje.filter((_, j) => j !== i);
+          bewaarMandje(mandje);
+          toonMandje();
+        });
+        return li;
+      }),
+    );
+    const leeg = mandje.length === 0;
+    $('mandje-leeg').classList.toggle('hidden', !leeg);
+    $('mandje-totaal').classList.toggle('hidden', leeg);
+    $('mandje-totaal').classList.toggle('flex', !leeg);
+    $('totaal-bedrag').textContent = formatEuro(totaal(mandje, cat));
+  }
+
+  // ---------- Ophaaldag ----------
+  const dagInput = $<HTMLInputElement>('ophaaldag');
+  dagInput.min = isoDatum(eersteOphaaldag());
+  const toonDag = () => {
+    $('ophaaldag-tekst').textContent = dagInput.value
+      ? formatDatum(new Date(`${dagInput.value}T00:00:00Z`))
+      : `Vanaf ${formatDatum(eersteOphaaldag())}`;
+  };
+  dagInput.addEventListener('input', toonDag);
+  toonDag();
+
+  // ---------- Versturen ----------
+  const melding = $('form-melding');
+  function toonMelding(tekst: string, soort: 'fout' | 'info' = 'fout') {
+    melding.textContent = tekst;
+    melding.className = `rounded-xl p-4 text-sm ${soort === 'fout' ? 'bg-roest/10 text-roest-donker' : 'bg-klimop/10 text-klimop'}`;
+    melding.scrollIntoView({ block: 'center', behavior: 'smooth' });
+  }
+
+  function leesKlant(): Klant {
+    const d = new FormData(formulier);
+    const s = (k: string) => String(d.get(k) ?? '').trim();
+    return {
+      naam: s('naam'),
+      email: s('email'),
+      telefoon: s('telefoon'),
+      ophaaldag: s('ophaaldag'),
+      voorkeurstijd: s('voorkeurstijd'),
+      betaalwijze: s('betaalwijze') === 'contant' ? 'contant' : 'tikkie',
+      opmerking: s('opmerking'),
+    };
+  }
+
+  function controleer(): Klant | null {
+    melding.className = 'hidden';
+    if (mandje.length === 0) {
+      toonMelding('Je bestelling is nog leeg. Voeg eerst een brood toe.');
+      return null;
+    }
+    dagInput.min = isoDatum(eersteOphaaldag()); // opnieuw, voor wie over middernacht heen zat
+    if (!formulier.checkValidity()) {
+      formulier.reportValidity();
+      return null;
+    }
+    const klant = leesKlant();
+    if (!ophaaldagToegestaan(klant.ophaaldag)) {
+      toonMelding(`Kies een ophaaldag vanaf ${formatDatum(eersteOphaaldag())}. Je brood heeft 3 dagen nodig.`);
+      dagInput.focus();
+      return null;
+    }
+    return klant;
+  }
+
+  function afronden(klant: Klant, tekst: string, testmodus = false) {
+    try {
+      sessionStorage.setItem(
+        'mijndesem-laatste-bestelling',
+        JSON.stringify({ tekst, naam: klant.naam, ophaaldag: klant.ophaaldag, betaalwijze: klant.betaalwijze, testmodus }),
+      );
+    } catch {}
+    mandje = [];
+    bewaarMandje(mandje);
+    location.href = '/bestellen/bedankt';
+  }
+
+  function viaWhatsApp(klant: Klant, tekst: string) {
+    window.open(`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(tekst)}`, '_blank', 'noopener');
+    afronden(klant, tekst);
+  }
+
+  formulier.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if ((formulier.elements.namedItem('botcheck') as HTMLInputElement).checked) return;
+    const klant = controleer();
+    if (!klant) return;
+    const tekst = bestelTekst(mandje, klant, cat, formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`)));
+
+    if (config.web3formsKey) {
+      const knop = $<HTMLButtonElement>('verstuur');
+      knop.disabled = true;
+      knop.textContent = 'Bezig met versturen…';
+      try {
+        const res = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+          body: JSON.stringify({
+            access_key: config.web3formsKey,
+            subject: `Bestelling ${klant.naam}, ophalen ${klant.ophaaldag}`,
+            from_name: 'Mijn Desem website',
+            replyto: klant.email,
+            name: klant.naam,
+            email: klant.email,
+            message: tekst,
+          }),
+        });
+        const data = await res.json().catch(() => ({}));
+        if (!res.ok || data.success === false) throw new Error(data.message || res.statusText);
+        afronden(klant, tekst);
+      } catch {
+        knop.disabled = false;
+        knop.textContent = 'Plaats bestelling';
+        toonMelding(
+          config.whatsapp
+            ? 'Versturen lukte niet. Probeer het opnieuw, of verstuur je bestelling via WhatsApp.'
+            : 'Versturen lukte niet. Controleer je internetverbinding en probeer het opnieuw.',
+        );
+      }
+    } else if (config.whatsapp) {
+      viaWhatsApp(klant, tekst);
+    } else if (config.dev) {
+      console.info('[testmodus] Bestelling (nog geen verzendkanaal ingesteld):\n\n' + tekst);
+      afronden(klant, tekst, true);
+    } else {
+      toonMelding('Online bestellen is tijdelijk niet beschikbaar. Neem contact met ons op.');
+    }
+  });
+
+  document.getElementById('via-whatsapp')?.addEventListener('click', () => {
+    const klant = controleer();
+    if (klant) viaWhatsApp(klant, bestelTekst(mandje, klant, cat, formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`))));
+  });
+
+  werkRegelPrijsBij();
+  toonMandje();
+</script>

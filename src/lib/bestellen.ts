@@ -20,6 +20,17 @@ export function eersteOphaaldag(nu: Date = new Date()): Date {
   return dag;
 }
 
+/** Datum als YYYY-MM-DD (voor <input type="date">). */
+export function isoDatum(dag: Date): string {
+  return dag.toISOString().slice(0, 10);
+}
+
+/** Is de gekozen ophaaldag (YYYY-MM-DD) toegestaan op moment `nu`? */
+export function ophaaldagToegestaan(iso: string, nu: Date = new Date()): boolean {
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(iso)) return false;
+  return iso >= isoDatum(eersteOphaaldag(nu));
+}
+
 export function formatDatum(dag: Date): string {
   return new Intl.DateTimeFormat('nl-NL', {
     timeZone: 'UTC',

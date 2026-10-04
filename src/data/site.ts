@@ -12,6 +12,13 @@ export const site = {
   kvk: '' as string,
 } as const;
 
+// Waar bestellingen naartoe gaan. Zie .env.example.
+// - PUBLIC_WEB3FORMS_KEY: bestelling komt per e-mail binnen (gratis via web3forms.com)
+// - site.whatsapp: klant kan de bestelling ook als WhatsApp-bericht versturen
+export const bestelKanaal = {
+  web3formsKey: (import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '') as string,
+};
+
 export const nav = [
   { href: '/broden', label: 'Broden' },
   { href: '/ons-verhaal', label: 'Ons verhaal' },

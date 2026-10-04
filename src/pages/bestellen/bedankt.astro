@@ -1,0 +1,55 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/Container.astro';
+import Divider from '@/components/Divider.astro';
+import Button from '@/components/Button.astro';
+import HeartIcon from '@/components/HeartIcon.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout title="Bedankt voor je bestelling" noindex>
+  <Container size="smal" class="py-20 text-center md:py-28">
+    <HeartIcon class="text-roest mx-auto size-10 animate-rijzen" />
+    <p class="font-hand text-roest mt-6 text-2xl">Dankjewel</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">
+      Je bestelling is binnen<span id="bedankt-naam"></span>
+    </h1>
+    <p class="text-notenhout-zacht mx-auto mt-6 max-w-lg text-lg">
+      De starter wordt klaargezet voor jouw brood. Je hoort snel van ons om een ophaaltijd af te
+      spreken; daarbij krijg je ook het adres in {site.city}<span id="tikkie-zin" class="hidden"> en een Tikkie</span>.
+    </p>
+
+    <div id="testmodus" class="bg-korst/15 mx-auto mt-8 hidden max-w-lg rounded-xl p-4 text-sm">
+      <strong>Testmodus:</strong> er is nog geen verzendkanaal (e-mail of WhatsApp) ingesteld, dus deze
+      bestelling is niet echt verstuurd.
+    </div>
+
+    <div id="samenvatting" class="bg-meel-warm mx-auto mt-10 hidden max-w-lg rounded-[var(--radius-kaart)] p-6 text-left sm:p-8">
+      <h2 class="font-serif text-xl">Jouw bestelling</h2>
+      <pre id="samenvatting-tekst" class="text-notenhout-zacht mt-4 font-sans text-sm leading-relaxed whitespace-pre-wrap"></pre>
+    </div>
+
+    <Divider class="text-roest/60 mt-14" />
+    <div class="mt-10 flex flex-wrap justify-center gap-3">
+      <Button href="/" variant="secundair">Terug naar home</Button>
+      <Button href="/bestellen">Nog iets bestellen</Button>
+    </div>
+  </Container>
+</BaseLayout>
+
+<script>
+  try {
+    const ruw = sessionStorage.getItem('mijndesem-laatste-bestelling');
+    if (ruw) {
+      const b = JSON.parse(ruw);
+      const voornaam = String(b.naam ?? '').split(' ')[0];
+      if (voornaam) document.getElementById('bedankt-naam')!.textContent = `, ${voornaam}`;
+      document.getElementById('tikkie-zin')!.classList.toggle('hidden', b.betaalwijze !== 'tikkie');
+      document.getElementById('testmodus')!.classList.toggle('hidden', !b.testmodus);
+      // Alleen het bestelgedeelte tonen, zonder contactgegevens
+      const deel = String(b.tekst).split('\n\nTelefoon:')[0].split('\n').slice(2).join('\n');
+      document.getElementById('samenvatting-tekst')!.textContent = deel;
+      document.getElementById('samenvatting')!.classList.remove('hidden');
+    }
+  } catch {}
+</script>
