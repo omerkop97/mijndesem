@@ -1,0 +1,67 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Container from '@/components/Container.astro';
+import { getBroden, getExtras } from '@/lib/catalogus';
+import { allergeenLabels, sporenMelding } from '@/lib/allergenen';
+import type { Allergeen } from '@/content.config';
+
+const broden = await getBroden();
+const extras = await getExtras();
+const kolommen = Object.keys(allergeenLabels) as Allergeen[];
+const rijen = [
+  ...broden.map((b) => ({ naam: b.data.naam, allergenen: b.data.allergenen, ingredienten: b.data.ingredienten.join(', ') })),
+  ...extras.map((e) => ({ naam: e.data.naam, allergenen: e.data.allergenen, ingredienten: '' })),
+];
+---
+
+<BaseLayout
+  title="Allergenen"
+  description="Allergeneninformatie van alle broden en extra's van Mijn Desem, volgens EU-verordening 1169/2011."
+>
+  <PaginaKop eyebrow="Duidelijk en eerlijk" titel="Allergenen">
+    <p>Hieronder zie je per brood en per extra welke allergenen erin zitten.</p>
+  </PaginaKop>
+
+  <Container class="pb-24">
+    <div class="bg-blush-zacht mx-auto mb-10 max-w-3xl rounded-[var(--radius-kaart)] p-6 sm:p-8">
+      <p class="font-semibold">Let op</p>
+      <p class="mt-1">
+        {sporenMelding} Heb je een ernstige allergie? Neem dan voor je bestelling contact op.
+      </p>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="w-full min-w-[40rem] text-left text-sm">
+        <caption class="sr-only">Allergenen per product</caption>
+        <thead>
+          <tr class="border-notenhout/20 border-b">
+            <th scope="col" class="py-3 pr-4 font-semibold">Product</th>
+            {kolommen.map((k) => <th scope="col" class="px-2 py-3 text-center font-semibold">{allergeenLabels[k]}</th>)}
+          </tr>
+        </thead>
+        <tbody class="divide-notenhout/10 divide-y">
+          {
+            rijen.map((r) => (
+              <tr>
+                <th scope="row" class="py-3 pr-4 font-normal">
+                  <span class="font-medium">{r.naam}</span>
+                  {r.ingredienten && <span class="text-notenhout-zacht block text-xs">{r.ingredienten}</span>}
+                </th>
+                {kolommen.map((k) => (
+                  <td class="px-2 py-3 text-center">
+                    {r.allergenen.includes(k) ? (
+                      <span class="bg-roest text-meel inline-flex size-6 items-center justify-center rounded-full text-xs" aria-label="bevat">●</span>
+                    ) : (
+                      <span class="text-notenhout/25" aria-label="bevat niet">–</span>
+                    )}
+                  </td>
+                ))}
+              </tr>
+            ))
+          }
+        </tbody>
+      </table>
+    </div>
+  </Container>
+</BaseLayout>

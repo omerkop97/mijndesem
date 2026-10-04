@@ -1,0 +1,42 @@
+---
+import type { CollectionEntry } from 'astro:content';
+
+interface Props {
+  items: CollectionEntry<'faq'>[];
+  class?: string;
+}
+const { items, class: className } = Astro.props;
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: items.map((i) => ({
+    '@type': 'Question',
+    name: i.data.vraag,
+    acceptedAnswer: { '@type': 'Answer', text: i.data.antwoord },
+  })),
+};
+---
+
+<div class:list={['divide-notenhout/10 border-notenhout/10 divide-y border-y', className]}>
+  {
+    items.map((i) => (
+      <details class="group" name="faq" id={i.id}>
+        <summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 font-serif text-xl sm:text-[1.35rem] [&::-webkit-details-marker]:hidden">
+          {i.data.vraag}
+          <span
+            class="border-notenhout/20 group-open:bg-roest group-open:text-meel group-open:border-roest flex size-9 shrink-0 items-center justify-center rounded-full border transition-all duration-300 group-open:rotate-45"
+            aria-hidden="true"
+          >
+            <svg class="size-4" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+              <path d="M8 3v10M3 8h10" />
+            </svg>
+          </span>
+        </summary>
+        <p class="text-notenhout-zacht max-w-2xl pb-7">{i.data.antwoord}</p>
+      </details>
+    ))
+  }
+</div>
+
+<script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />

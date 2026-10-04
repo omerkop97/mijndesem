@@ -1,0 +1,22 @@
+---
+import { site } from '@/data/site';
+
+const stappen = [
+  { titel: 'Stel je brood samen', tekst: 'Kies je brood en voeg naar wens pitten, zaden, rozijnen of hazelnoten toe.' },
+  { titel: 'Kies je ophaaldag', tekst: 'Elke dag van de week mogelijk. Bestel minimaal 3 dagen van tevoren, vóór middernacht.' },
+  { titel: 'Betaal zoals jij wilt', tekst: 'Vooraf via een Tikkie die je van ons ontvangt, of contant bij het ophalen.' },
+  { titel: 'Ophalen in ' + site.city, tekst: 'We stemmen samen een ophaaltijd af. Het adres krijg je in de bevestiging.' },
+];
+---
+
+<ol class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+  {
+    stappen.map((s, i) => (
+      <li data-rijs style={`transition-delay:${i * 100}ms`}>
+        <span class="text-roest/80 font-serif text-5xl leading-none italic">{i + 1}</span>
+        <h3 class="mt-4 font-serif text-xl">{s.titel}</h3>
+        <p class="text-notenhout-zacht mt-2">{s.tekst}</p>
+      </li>
+    ))
+  }
+</ol>

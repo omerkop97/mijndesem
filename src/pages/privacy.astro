@@ -1,0 +1,55 @@
+---
+// CONCEPT: laten controleren en aanvullen (contactgegevens, KvK) vóór livegang.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Container from '@/components/Container.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout title="Privacyverklaring" description="Hoe Mijn Desem omgaat met je persoonsgegevens.">
+  <PaginaKop titel="Privacyverklaring" />
+  <Container size="smal" class="pb-24">
+    <div class="tekst">
+      <p>
+        {site.name} gaat zorgvuldig om met je persoonsgegevens. In deze verklaring lees je welke
+        gegevens we verzamelen, waarom, en wat je rechten zijn.
+      </p>
+
+      <h2>Welke gegevens</h2>
+      <p>Als je een bestelling plaatst, vragen we:</p>
+      <ul>
+        <li>je naam;</li>
+        <li>je e-mailadres en telefoonnummer;</li>
+        <li>je bestelling, ophaaldag en eventuele opmerkingen.</li>
+      </ul>
+
+      <h2>Waarvoor</h2>
+      <p>
+        We gebruiken deze gegevens alleen om je bestelling te verwerken, een ophaalmoment met je af te
+        spreken en je zo nodig een betaalverzoek (Tikkie) te sturen. We verkopen of delen je gegevens
+        niet met anderen voor marketing.
+      </p>
+
+      <h2>Hoe lang</h2>
+      <p>
+        We bewaren bestelgegevens niet langer dan nodig, en in elk geval niet langer dan de wettelijke
+        bewaarplicht voor de administratie (7 jaar voor financiële gegevens).
+      </p>
+
+      <h2>Cookies en statistieken</h2>
+      <p>
+        Deze website gebruikt geen tracking- of advertentiecookies. Voor bezoekersstatistieken
+        gebruiken we een privacyvriendelijke dienst die geen persoonsgegevens opslaat.
+      </p>
+
+      <h2>Je rechten</h2>
+      <p>
+        Je mag altijd vragen welke gegevens we van je hebben, en die laten aanpassen of verwijderen.
+        Neem daarvoor <a href="/contact">contact</a> met ons op. Ben je het niet eens met hoe we met
+        je gegevens omgaan, dan kun je een klacht indienen bij de Autoriteit Persoonsgegevens.
+      </p>
+
+      <p class="text-sm">Laatst bijgewerkt: oktober 2026.</p>
+    </div>
+  </Container>
+</BaseLayout>

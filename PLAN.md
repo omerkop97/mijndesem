@@ -162,11 +162,11 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [x] 2.4 Instellingen `ordering`: minimale doorlooptijd (3 dagen), bakdagen (ma t/m zo), dichte dagen/vakantie, optioneel een max. aantal per dag.
 
 ### Fase 3: Pagina's
-- [ ] 3.1 Homepage (alle secties uit §5).
-- [ ] 3.2 Assortimentspagina `/broden`.
-- [ ] 3.3 Productpagina's `/broden/[slug]`.
-- [ ] 3.4 `/ons-verhaal` met procestijdlijn en starterverhaal.
-- [ ] 3.5 FAQ, contact, allergenen, privacy, voorwaarden.
+- [x] 3.1 Homepage (alle secties uit §5).
+- [x] 3.2 Assortimentspagina `/broden`.
+- [x] 3.3 Productpagina's `/broden/[slug]`.
+- [x] 3.4 `/ons-verhaal` met procestijdlijn en starterverhaal.
+- [x] 3.5 FAQ, contact, allergenen, privacy, voorwaarden.
 
 ### Fase 4: Bestellen (v1)
 - [ ] 4.1 Configurator-island: brood → extra → aantal → samenvatting.

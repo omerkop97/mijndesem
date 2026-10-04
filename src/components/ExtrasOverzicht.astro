@@ -1,0 +1,41 @@
+---
+import { getExtras } from '@/lib/catalogus';
+import { formatMeerprijs } from '@/lib/prijs';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+const extras = await getExtras();
+const groepen = [
+  { id: 'zaden', titel: 'Pitten en zaden' },
+  { id: 'vruchten-noten', titel: 'Rozijnen en noten' },
+] as const;
+---
+
+<div class:list={['grid gap-6 md:grid-cols-2', className]}>
+  {
+    groepen.map((g) => (
+      <div class="bg-meel shadow-zacht rounded-[var(--radius-kaart)] p-7 sm:p-8" data-rijs>
+        <h3 class="font-serif text-2xl">{g.titel}</h3>
+        <ul class="divide-linnen mt-5 divide-y">
+          {extras
+            .filter((e) => e.data.groep === g.id)
+            .map((e) => (
+              <li class="flex items-baseline justify-between gap-4 py-3">
+                <span>
+                  {e.data.naam}
+                  {e.data.omschrijving && (
+                    <span class="text-notenhout-zacht block text-sm">{e.data.omschrijving}</span>
+                  )}
+                </span>
+                <span class="text-roest shrink-0 font-medium tabular-nums">
+                  {formatMeerprijs(e.data.prijs)}
+                </span>
+              </li>
+            ))}
+        </ul>
+      </div>
+    ))
+  }
+</div>

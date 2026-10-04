@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Container from '@/components/Container.astro';
+import FaqLijst from '@/components/FaqLijst.astro';
+import SluitCta from '@/components/SluitCta.astro';
+import { getFaq } from '@/lib/catalogus';
+
+const faq = await getFaq();
+---
+
+<BaseLayout
+  title="Veelgestelde vragen"
+  description="Antwoorden over bestellen, ophalen, betalen, allergenen en het bewaren van zuurdesembrood van Mijn Desem."
+>
+  <PaginaKop eyebrow="Goed om te weten" titel="Veelgestelde vragen">
+    <p>Staat je vraag er niet bij? <a href="/contact" class="text-roest underline underline-offset-4">Neem gerust contact op</a>.</p>
+  </PaginaKop>
+  <Container size="smal" class="pb-24">
+    <FaqLijst items={faq} />
+  </Container>
+  <SluitCta />
+</BaseLayout>

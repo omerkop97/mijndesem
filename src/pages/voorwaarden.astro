@@ -1,0 +1,49 @@
+---
+// CONCEPT: laten controleren vóór livegang.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Container from '@/components/Container.astro';
+import { site } from '@/data/site';
+---
+
+<BaseLayout title="Voorwaarden" description="De voorwaarden voor bestellen bij Mijn Desem.">
+  <PaginaKop titel="Voorwaarden" />
+  <Container size="smal" class="pb-24">
+    <div class="tekst">
+      <p>Fijn dat je bij {site.name} bestelt. Dit zijn de afspraken, kort en duidelijk.</p>
+
+      <h2>Bestellen</h2>
+      <ul>
+        <li>Je bestelt minimaal 3 dagen vooruit, vóór 00:00 uur. Wie bijvoorbeeld op maandag bestelt, kan vanaf donderdag ophalen.</li>
+        <li>Je bestelling is definitief zodra je een bevestiging van ons hebt ontvangen.</li>
+        <li>Alle prijzen op de website zijn eindprijzen in euro's.</li>
+      </ul>
+
+      <h2>Ophalen</h2>
+      <ul>
+        <li>Bestellingen worden opgehaald in {site.city}. Het adres staat in de bevestiging.</li>
+        <li>De ophaaltijd stemmen we samen af.</li>
+        <li>Lukt ophalen niet op het afgesproken moment? Laat het zo snel mogelijk weten.</li>
+      </ul>
+
+      <h2>Betalen</h2>
+      <p>Je betaalt vooraf via een Tikkie die je van ons ontvangt, of contant bij het ophalen.</p>
+
+      <h2>Wijzigen en annuleren</h2>
+      <p>
+        Omdat de starter al drie dagen van tevoren voor jouw brood wordt klaargezet, kun je een
+        bestelling alleen kosteloos wijzigen of annuleren tot het deeg is gemaakt. Neem daarvoor zo
+        snel mogelijk <a href="/contact">contact</a> op. Brood is een vers product: het herroepingsrecht
+        is daarom niet van toepassing.
+      </p>
+
+      <h2>Allergenen</h2>
+      <p>
+        Bekijk vóór je bestelling de <a href="/allergenen">allergeneninformatie</a>. Bij een ernstige
+        allergie hoor ik het graag van tevoren.
+      </p>
+
+      <p class="text-sm">Laatst bijgewerkt: oktober 2026.</p>
+    </div>
+  </Container>
+</BaseLayout>

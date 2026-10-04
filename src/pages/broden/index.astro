@@ -1,0 +1,61 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Section from '@/components/Section.astro';
+import Heading from '@/components/Heading.astro';
+import BroodKaart from '@/components/BroodKaart.astro';
+import ExtrasOverzicht from '@/components/ExtrasOverzicht.astro';
+import SluitCta from '@/components/SluitCta.astro';
+import { getBroden } from '@/lib/catalogus';
+import { formatEuro } from '@/lib/prijs';
+
+const broden = await getBroden();
+
+// Snelle prijslijst bovenaan, voor wie meteen wil weten waar hij aan toe is.
+---
+
+<BaseLayout
+  title="Onze broden en prijzen"
+  description="Vijf soorten handgemaakt zuurdesembrood: wit, lichtbruin, bruin, spelt en rogge. Vanaf € 5,00, met extra's naar keuze. Ophalen in Zevenaar."
+>
+  <PaginaKop eyebrow="Het assortiment" titel="Onze broden">
+    <p>
+      Vijf broden, allemaal met dezelfde zelfgekweekte starter en een lange, rustige rijstijd. Kies je
+      favoriet en maak hem helemaal van jou met pitten, zaden, rozijnen of hazelnoten.
+    </p>
+  </PaginaKop>
+
+  <Section class="!pt-0">
+    <div class="grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
+      {broden.map((brood) => <BroodKaart brood={brood} kop="h2" />)}
+    </div>
+  </Section>
+
+  <Section tone="warm" size="smal">
+    <Heading title="Prijslijst" align="midden" />
+    <table class="mt-10 w-full text-left">
+      <caption class="sr-only">Prijzen per brood</caption>
+      <tbody class="divide-notenhout/10 divide-y">
+        {
+          broden.map((b) => (
+            <tr>
+              <th scope="row" class="py-4 font-serif text-xl font-normal">
+                <a href={`/broden/${b.id}`} class="hover:text-roest">{b.data.naam}</a>
+              </th>
+              <td class="py-4 text-right text-lg font-medium tabular-nums">{formatEuro(b.data.prijs)}</td>
+            </tr>
+          ))
+        }
+      </tbody>
+    </table>
+  </Section>
+
+  <Section tone="blush">
+    <Heading eyebrow="Naar jouw smaak" title="Extra's, allemaal te combineren" align="midden">
+      <p>Voeg zoveel extra's toe als je wilt, op elk brood. De meerprijs geldt per brood.</p>
+    </Heading>
+    <ExtrasOverzicht class="mx-auto mt-12 max-w-4xl" />
+  </Section>
+
+  <SluitCta />
+</BaseLayout>

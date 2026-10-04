@@ -1,0 +1,85 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Container from '@/components/Container.astro';
+import Button from '@/components/Button.astro';
+import foto from '@/assets/photos/twee-broden-rijsmand-tuin.jpg';
+import { site } from '@/data/site';
+
+const kanalen = [
+  site.whatsapp && {
+    label: 'WhatsApp',
+    waarde: 'Stuur een appje',
+    href: `https://wa.me/${site.whatsapp}`,
+  },
+  site.email && { label: 'E-mail', waarde: site.email, href: `mailto:${site.email}` },
+  site.instagram && {
+    label: 'Instagram',
+    waarde: `@${site.instagram}`,
+    href: `https://instagram.com/${site.instagram}`,
+  },
+].filter(Boolean) as { label: string; waarde: string; href: string }[];
+---
+
+<BaseLayout title="Contact" description={`Neem contact op met Mijn Desem, thuisbakkerij in ${site.city}.`}>
+  <PaginaKop eyebrow="Zeg het maar" titel="Contact">
+    <p>Een vraag, een speciaal verzoek of een grote bestelling? Ik hoor graag van je.</p>
+  </PaginaKop>
+
+  <Container class="grid gap-12 pb-24 md:grid-cols-2 md:items-center">
+    <div class="space-y-8">
+      {
+        kanalen.length > 0 ? (
+          <ul class="space-y-4">
+            {kanalen.map((k) => (
+              <li>
+                <a
+                  href={k.href}
+                  class="bg-meel-warm hover:bg-linnen group flex items-center justify-between rounded-[var(--radius-kaart)] p-6 transition-colors"
+                  target={k.href.startsWith('http') ? '_blank' : undefined}
+                  rel={k.href.startsWith('http') ? 'noopener' : undefined}
+                >
+                  <span>
+                    <span class="text-notenhout-zacht block text-sm">{k.label}</span>
+                    <span class="font-serif text-xl">{k.waarde}</span>
+                  </span>
+                  <span class="text-roest transition-transform group-hover:translate-x-1" aria-hidden="true">→</span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="bg-meel-warm rounded-[var(--radius-kaart)] p-6">
+            Contactgegevens volgen binnenkort.
+          </p>
+        )
+      }
+
+      <dl class="border-notenhout/10 divide-notenhout/10 divide-y border-y">
+        <div class="flex justify-between gap-4 py-4">
+          <dt class="font-semibold">Ophalen</dt>
+          <dd class="text-notenhout-zacht text-right">{site.city}, adres in de bevestiging</dd>
+        </div>
+        <div class="flex justify-between gap-4 py-4">
+          <dt class="font-semibold">Bakdagen</dt>
+          <dd class="text-notenhout-zacht text-right">Maandag t/m zondag</dd>
+        </div>
+        <div class="flex justify-between gap-4 py-4">
+          <dt class="font-semibold">Bestellen</dt>
+          <dd class="text-notenhout-zacht text-right">Minimaal 3 dagen vooruit</dd>
+        </div>
+      </dl>
+
+      <Button href="/bestellen" size="groot">Direct bestellen</Button>
+    </div>
+
+    <Image
+      src={foto}
+      alt="Twee zuurdesembroden in een rieten rijsmand, buiten in de zon"
+      widths={[400, 640, 900]}
+      sizes="(min-width: 768px) 45vw, 90vw"
+      class="shadow-diep mx-auto aspect-[4/5] w-full max-w-md rounded-t-full rounded-b-[var(--radius-kaart)] object-cover"
+    />
+  </Container>
+</BaseLayout>

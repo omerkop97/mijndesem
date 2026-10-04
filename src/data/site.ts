@@ -6,10 +6,10 @@ export const site = {
     'Handgemaakt zuurdesembrood uit Zevenaar. Gebakken met een eigen starter, langzaam gerezen en 100% natuurlijk.',
   city: 'Zevenaar',
   // TODO: invullen zodra bekend
-  whatsapp: '', // bijv. '31612345678'
-  email: '',
-  instagram: '',
-  kvk: '',
+  whatsapp: '' as string, // bijv. '31612345678'
+  email: '' as string,
+  instagram: '' as string,
+  kvk: '' as string,
 } as const;
 
 export const nav = [

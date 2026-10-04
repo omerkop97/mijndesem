@@ -1,0 +1,94 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import PaginaKop from '@/components/PaginaKop.astro';
+import Section from '@/components/Section.astro';
+import Heading from '@/components/Heading.astro';
+import ProcesTijdlijn from '@/components/ProcesTijdlijn.astro';
+import HeartIcon from '@/components/HeartIcon.astro';
+import SluitCta from '@/components/SluitCta.astro';
+import foto from '@/assets/photos/hartjesbrood-rijsmand.jpg';
+import tafel from '@/assets/photos/broden-bovenaanzicht-notenhout.jpg';
+import { site } from '@/data/site';
+
+const waarden = [
+  { titel: 'Puur', tekst: 'Meel, water, zout en zuurdesem. Geen bakkersgist, geen broodverbeteraars, geen E-nummers.' },
+  { titel: 'Geduld', tekst: 'Elk brood krijgt de tijd die het nodig heeft. Daarom bestel je 3 dagen van tevoren.' },
+  { titel: 'Met de hand', tekst: 'Elk deeg wordt met de hand gevouwen, gevormd en ingesneden. Geen brood is precies hetzelfde.' },
+  { titel: 'Dichtbij', tekst: `Gebakken in een thuisbakkerij in ${site.city}, en persoonlijk aan jou meegegeven.` },
+];
+---
+
+<BaseLayout
+  title="Ons verhaal"
+  description={`Het verhaal achter Mijn Desem: handgemaakt zuurdesembrood met een zelfgekweekte starter, gebakken vanuit huis in ${site.city}.`}
+>
+  <PaginaKop eyebrow="Puur ambacht" titel="Ons verhaal">
+    <p>Over een pot meel en water die uitgroeide tot een kleine bakkerij aan huis.</p>
+  </PaginaKop>
+
+  <Section class="!pt-0">
+    <div class="grid items-center gap-12 md:grid-cols-2 md:gap-16">
+      <div class="relative mx-auto w-full max-w-md" data-rijs>
+        <Image
+          src={foto}
+          alt="Een vers gebakken zuurdesembrood met hartjes van bloem, in een rieten rijsmand in de tuin"
+          widths={[400, 640, 900]}
+          sizes="(min-width: 768px) 28rem, 90vw"
+          class="shadow-diep aspect-[4/5] w-full rounded-t-full rounded-b-[var(--radius-kaart)] object-cover"
+        />
+      </div>
+      <div class="space-y-5 text-lg">
+        <!-- TODO bakker: dit verhaal in eigen woorden aanvullen -->
+        <p class="font-serif text-2xl leading-snug sm:text-3xl" data-rijs>
+          Mijn Desem begon met een glazen pot, wat meel, water en heel veel nieuwsgierigheid.
+        </p>
+        <p class="text-notenhout-zacht" data-rijs>
+          Dag na dag voeden, kijken, ruiken en wachten. Tot de starter op een ochtend bruisend over de
+          rand van de pot kwam. Vanaf dat moment was er geen weg terug.
+        </p>
+        <p class="text-notenhout-zacht" data-rijs>
+          Wat begon als bakken voor familie en vrienden, groeide uit tot Mijn Desem: een kleine
+          thuisbakkerij in {site.city} waar elk brood nog met de hand en met aandacht wordt gemaakt.
+          Precies zoals brood bedoeld is.
+        </p>
+        <p class="font-hand text-roest text-2xl" data-rijs>Met liefde gebakken ♡</p>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="warm" id="proces">
+    <Heading eyebrow="Van starter tot brood" title="Drie dagen werk in elk brood" align="midden" />
+    <div class="mt-16">
+      <ProcesTijdlijn />
+    </div>
+  </Section>
+
+  <Section>
+    <div class="grid gap-14 lg:grid-cols-12">
+      <div class="lg:col-span-5">
+        <Heading eyebrow="Waar we voor staan" title="Eerlijk brood, zonder omwegen" />
+        <Image
+          src={tafel}
+          alt="Twee zuurdesembroden met insnijdingen in een rijsmand op een geborduurde doek, van bovenaf gezien"
+          widths={[400, 640, 800]}
+          sizes="(min-width: 1024px) 26rem, 90vw"
+          class="shadow-zacht mt-10 hidden aspect-square w-full rounded-[var(--radius-kaart)] object-cover lg:block"
+        />
+      </div>
+      <ul class="grid gap-6 sm:grid-cols-2 lg:col-span-7">
+        {
+          waarden.map((w) => (
+            <li class="bg-meel-warm rounded-[var(--radius-kaart)] p-8" data-rijs>
+              <HeartIcon class="text-roest size-5" />
+              <h3 class="mt-4 font-serif text-2xl">{w.titel}</h3>
+              <p class="text-notenhout-zacht mt-2">{w.tekst}</p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Section>
+
+  <SluitCta titel="Proef het verschil" />
+</BaseLayout>
