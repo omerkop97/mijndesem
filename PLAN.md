@@ -172,7 +172,8 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [x] 4.1 Configurator-island: brood → extra → aantal → samenvatting.
 - [x] 4.2 Mandje (localStorage) voor meerdere broden per bestelling.
 - [x] 4.3 Bestelformulier: naam, e-mail, telefoon (WhatsApp), ophaaldag, voorkeurstijd (optioneel, "in overleg"), betaalwijze (Tikkie / contant), opmerking.
-- [x] 4.4 Datumkiezer: wie vóór 00:00 bestelt op dag D, kan ophalen vanaf D+3 (in Nederlandse tijd, Europe/Amsterdam). Dichte dagen zijn uitgeschakeld en dezelfde check gebeurt server-side.
+- [x] 4.4 Datumkiezer: wie vóór 00:00 bestelt op dag D, kan ophalen vanaf D+3 (in Nederlandse tijd, Europe/Amsterdam), gecontroleerd in de browser.
+- [ ] 4.7 Later: dichte dagen/vakantie blokkeren en een server-side check (vereist een serverless functie, zie fase 7).
 - [ ] 4.5 Verzending naar de bakker: code klaar (e-mail via Web3Forms en/of WhatsApp). **Nog nodig: sleutel en/of WhatsApp-nummer.** Bevestiging voor de klant = bedankpagina met samenvatting (automatische mail vereist betaald Web3Forms-plan of eigen functie in fase 7).
 - [x] 4.6 Bedankpagina met afhaalinformatie.
 
