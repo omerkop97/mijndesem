@@ -1,0 +1,75 @@
+---
+import Container from './Container.astro';
+import Logo from './Logo.astro';
+import Divider from './Divider.astro';
+import { nav, site } from '@/data/site';
+
+const jaar = new Date().getFullYear();
+const juridisch = [
+  { href: '/allergenen', label: 'Allergenen' },
+  { href: '/privacy', label: 'Privacy' },
+  { href: '/voorwaarden', label: 'Voorwaarden' },
+];
+---
+
+<footer class="bg-blush text-notenhout">
+  <Container size="breed" class="pt-16 pb-10 md:pt-20">
+    <div class="grid gap-12 md:grid-cols-12">
+      <div class="md:col-span-5">
+        <Logo />
+        <p class="text-notenhout/80 mt-5 max-w-sm">
+          Handgemaakt zuurdesembrood uit {site.city}. Met een eigen starter, langzaam gerezen en
+          zonder toevoegingen.
+        </p>
+        <p class="font-hand text-roest-donker mt-4 text-2xl">{site.tagline}.</p>
+      </div>
+
+      <div class="md:col-span-4">
+        <h2 class="mb-4 font-sans text-sm font-semibold tracking-[0.14em] uppercase">Bestellen</h2>
+        <ul class="text-notenhout/85 space-y-2">
+          <li>Minimaal 3 dagen vooruit bestellen</li>
+          <li>Elke dag van de week, maandag t/m zondag</li>
+          <li>Ophalen in {site.city}, tijd in overleg</li>
+          <li>Betalen via Tikkie of contant</li>
+        </ul>
+      </div>
+
+      <nav aria-label="Footermenu" class="md:col-span-3">
+        <h2 class="mb-4 font-sans text-sm font-semibold tracking-[0.14em] uppercase">Menu</h2>
+        <ul class="space-y-2">
+          {
+            [{ href: '/bestellen', label: 'Bestellen' }, ...nav].map((item) => (
+              <li>
+                <a href={item.href} class="hover:text-roest-donker underline-offset-4 hover:underline">
+                  {item.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </nav>
+    </div>
+
+    <Divider class="text-roest-donker/50 mt-14" />
+
+    <div
+      class="text-notenhout/70 mt-8 flex flex-col items-center justify-between gap-4 text-sm sm:flex-row"
+    >
+      <p>
+        {`© ${jaar} ${site.name}`}
+        {site.kvk && <span> · KvK {site.kvk}</span>}
+      </p>
+      <ul class="flex gap-5">
+        {
+          juridisch.map((item) => (
+            <li>
+              <a href={item.href} class="hover:text-notenhout underline-offset-4 hover:underline">
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </Container>
+</footer>

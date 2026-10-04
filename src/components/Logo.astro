@@ -1,0 +1,45 @@
+---
+// Tijdelijk logo: broodillustratie uit het originele logo + script-woordmerk.
+// Wordt vervangen door een gevectoriseerde SVG zodra die er is (PLAN.md fase 0.3).
+import { Image } from 'astro:assets';
+import brood from '@/assets/brand/brood-illustratie.png';
+import { site } from '@/data/site';
+
+interface Props {
+  variant?: 'header' | 'groot';
+  class?: string;
+}
+const { variant = 'header', class: className } = Astro.props;
+const groot = variant === 'groot';
+---
+
+<span
+  class:list={[
+    'inline-flex items-center',
+    groot ? 'flex-col gap-3 text-center' : 'gap-2.5',
+    className,
+  ]}
+>
+  <Image
+    src={brood}
+    alt=""
+    width={groot ? 160 : 44}
+    class:list={[groot ? 'w-32 sm:w-40' : 'w-10 sm:w-11', 'h-auto drop-shadow-sm']}
+    loading="eager"
+  />
+  <span class="flex flex-col">
+    <span
+      class:list={[
+        'font-script leading-none whitespace-nowrap',
+        groot ? 'text-6xl sm:text-7xl' : 'text-[2rem] sm:text-[2.2rem]',
+      ]}>{site.name}</span
+    >
+    {
+      groot && (
+        <span class="text-notenhout-zacht mt-3 font-serif text-lg tracking-[0.2em] uppercase">
+          {site.tagline}
+        </span>
+      )
+    }
+  </span>
+</span>

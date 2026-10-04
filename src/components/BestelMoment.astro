@@ -1,0 +1,30 @@
+---
+// Live regel: "Bestel vandaag, klaar vanaf <datum>". Besteld vóór 00:00 op dag D = ophalen vanaf D+3.
+// De datum wordt in de browser berekend (Nederlandse tijd), zodat de statische site altijd klopt.
+import HeartIcon from './HeartIcon.astro';
+
+interface Props {
+  class?: string;
+}
+const { class: className } = Astro.props;
+---
+
+<p
+  class:list={[
+    'bg-meel/80 border-linnen inline-flex items-center gap-2.5 rounded-full border py-2 pr-4 pl-3 text-sm backdrop-blur',
+    className,
+  ]}
+>
+  <HeartIcon class="text-roest size-4 shrink-0" />
+  <span>
+    Bestel vandaag, vers voor je klaar vanaf <strong class="font-semibold" data-ophaaldatum
+      >over 3 dagen</strong
+    >
+  </span>
+</p>
+
+<script>
+  import { eersteOphaaldag, formatDatum } from '@/lib/bestellen';
+  const tekst = formatDatum(eersteOphaaldag());
+  document.querySelectorAll('[data-ophaaldatum]').forEach((el) => (el.textContent = tekst));
+</script>

@@ -1,0 +1,88 @@
+---
+import '@fontsource-variable/fraunces/full.css';
+import '@fontsource-variable/fraunces/full-italic.css';
+import '@fontsource-variable/inter';
+import '@fontsource/caveat/500.css';
+import '@fontsource/great-vibes';
+import '@/styles/global.css';
+
+import { getImage } from 'astro:assets';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import ogFoto from '@/assets/photos/broden-bovenaanzicht-notenhout.jpg';
+import { site } from '@/data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: ImageMetadata;
+  noindex?: boolean;
+}
+const { title, description = site.description, image = ogFoto, noindex = false } = Astro.props;
+
+const volleTitel = title ? `${title} · ${site.name}` : `${site.name} · Ambachtelijk zuurdesembrood uit ${site.city}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const og = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const ogUrl = new URL(og.src, Astro.site);
+---
+
+<!doctype html>
+<html lang="nl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{volleTitel}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <meta name="theme-color" content="#f7f1ea" />
+
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="nl_NL" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={volleTitel} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogUrl} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <script is:inline>
+      document.documentElement.classList.add('js');
+    </script>
+  </head>
+  <body class="flex min-h-dvh flex-col">
+    <a
+      href="#inhoud"
+      class="bg-notenhout text-meel sr-only z-[100] rounded-full px-5 py-3 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
+      >Naar de inhoud</a
+    >
+    <Header />
+    <main id="inhoud" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+
+    <script>
+      // Scroll-reveal: [data-rijs] elementen "rijzen" zacht in beeld.
+      const els = document.querySelectorAll<HTMLElement>('[data-rijs]');
+      const io = new IntersectionObserver(
+        (entries) => {
+          for (const e of entries) {
+            if (e.isIntersecting) {
+              e.target.classList.add('is-zichtbaar');
+              io.unobserve(e.target);
+            }
+          }
+        },
+        { rootMargin: '0px 0px -8% 0px', threshold: 0.1 },
+      );
+      els.forEach((el) => io.observe(el));
+    </script>
+  </body>
+</html>

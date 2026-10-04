@@ -1,0 +1,101 @@
+---
+// Interne stijlgids: alle design tokens en basiscomponenten op één pagina. Niet geïndexeerd.
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Section from '@/components/Section.astro';
+import Heading from '@/components/Heading.astro';
+import Button from '@/components/Button.astro';
+import Divider from '@/components/Divider.astro';
+import Logo from '@/components/Logo.astro';
+import HeartIcon from '@/components/HeartIcon.astro';
+
+const kleuren = [
+  { naam: 'Meel', token: 'meel', hex: '#F7F1EA', rol: 'Achtergrond' },
+  { naam: 'Meel warm', token: 'meel-warm', hex: '#F1E7DC', rol: 'Afwisselende sectie' },
+  { naam: 'Linnen', token: 'linnen', hex: '#EADBCB', rol: 'Lijnen en kaarten' },
+  { naam: 'Blush zacht', token: 'blush-zacht', hex: '#EAD2C7', rol: 'Zachte merksectie' },
+  { naam: 'Blush', token: 'blush', hex: '#D4A898', rol: 'Logo, footer' },
+  { naam: 'Korst', token: 'korst', hex: '#C2873A', rol: 'Decoratief accent' },
+  { naam: 'Roest', token: 'roest', hex: '#8B3A22', rol: 'Knoppen, highlights' },
+  { naam: 'Roest donker', token: 'roest-donker', hex: '#6E2C18', rol: 'Hover' },
+  { naam: 'Klimop', token: 'klimop', hex: '#4F5B3F', rol: 'Spaarzaam accent' },
+  { naam: 'Notenhout zacht', token: 'notenhout-zacht', hex: '#5B4637', rol: 'Secundaire tekst' },
+  { naam: 'Notenhout', token: 'notenhout', hex: '#2A1B14', rol: 'Tekst' },
+];
+---
+
+<BaseLayout title="Stijlgids" noindex>
+  <Section>
+    <Heading level={1} eyebrow="Intern" title="Stijlgids Mijn Desem">
+      <p>Alle kleuren, lettertypes en basiscomponenten bij elkaar. Pas tokens aan in <code>src/styles/global.css</code>.</p>
+    </Heading>
+
+    <div class="mt-14 flex justify-center rounded-[var(--radius-kaart)] bg-blush py-14">
+      <Logo variant="groot" />
+    </div>
+  </Section>
+
+  <Section tone="warm">
+    <Heading title="Kleuren" />
+    <ul class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      {
+        kleuren.map((k) => (
+          <li class="bg-meel shadow-zacht overflow-hidden rounded-2xl">
+            <div class="border-linnen h-24 border-b" style={`background:${k.hex}`} />
+            <div class="p-4 text-sm">
+              <p class="font-semibold">{k.naam}</p>
+              <p class="text-notenhout-zacht">{k.rol}</p>
+              <p class="mt-1 font-mono text-xs">{k.hex} · {k.token}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ul>
+  </Section>
+
+  <Section>
+    <Heading title="Typografie" />
+    <div class="mt-10 space-y-8">
+      <div>
+        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Fraunces · koppen</p>
+        <p class="font-serif text-5xl">Langzaam gerezen, <em class="text-roest">met liefde</em> gebakken</p>
+      </div>
+      <div>
+        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Inter · lopende tekst</p>
+        <p class="max-w-2xl text-lg">
+          Elk brood begint drie dagen voordat je het ophaalt. Eerst wordt de starter gevoed, daarna
+          wordt het deeg gekneed, gevouwen en mag het rustig rijzen.
+        </p>
+      </div>
+      <div>
+        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Caveat · handschrift-accent</p>
+        <p class="font-hand text-roest text-3xl">vers uit de oven ♡</p>
+      </div>
+      <div>
+        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Great Vibes · alleen het logo (tijdelijk)</p>
+        <p class="font-script text-6xl">Mijn Desem</p>
+      </div>
+    </div>
+  </Section>
+
+  <Section tone="blush">
+    <Heading title="Knoppen en details" />
+    <div class="mt-10 flex flex-wrap items-center gap-4">
+      <Button>Primair</Button>
+      <Button variant="secundair">Secundair</Button>
+      <Button variant="licht">Licht</Button>
+      <Button size="groot">Groot</Button>
+    </div>
+    <div class="mt-12 flex items-center gap-4 text-roest">
+      <HeartIcon class="size-4" />
+      <HeartIcon class="size-6" />
+      <HeartIcon class="size-10" />
+    </div>
+    <Divider class="text-roest/70 mt-12" />
+  </Section>
+
+  <Section tone="donker">
+    <Heading eyebrow="Sectie-variant" title="Donkere sectie voor contrast" />
+    <p class="text-meel/75 mt-5 max-w-xl">Bijvoorbeeld voor het verhaal van de starter of een afsluitende call-to-action.</p>
+    <Button variant="licht" class="mt-8">Bestellen</Button>
+  </Section>
+</BaseLayout>

@@ -1,0 +1,45 @@
+---
+import HeartIcon from './HeartIcon.astro';
+
+interface Props {
+  href?: string;
+  type?: 'button' | 'submit';
+  variant?: 'primair' | 'secundair' | 'licht';
+  size?: 'normaal' | 'groot';
+  class?: string;
+  [key: string]: unknown;
+}
+const {
+  href,
+  type = 'button',
+  variant = 'primair',
+  size = 'normaal',
+  class: className,
+  ...rest
+} = Astro.props;
+
+const variants = {
+  primair: 'bg-roest text-meel hover:bg-roest-donker shadow-zacht',
+  secundair: 'border border-notenhout/25 text-notenhout hover:border-roest hover:text-roest',
+  licht: 'bg-meel text-notenhout hover:bg-white shadow-zacht',
+};
+const sizes = {
+  normaal: 'h-11 px-6 text-[0.95rem]',
+  groot: 'h-13 px-8 text-base',
+};
+const classes = [
+  'group inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-[0.01em]',
+  'transition-all duration-300 ease-(--ease-zacht) active:scale-[0.98]',
+  variants[variant],
+  sizes[size],
+  className,
+];
+const Tag = href ? 'a' : 'button';
+---
+
+<Tag class:list={classes} href={href} type={href ? undefined : type} {...rest}>
+  <slot />
+  <HeartIcon
+    class="size-0 opacity-0 transition-all duration-300 ease-(--ease-zacht) group-hover:size-3.5 group-hover:opacity-100"
+  />
+</Tag>

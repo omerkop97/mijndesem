@@ -1,0 +1,24 @@
+---
+import Container from './Container.astro';
+
+interface Props {
+  id?: string;
+  tone?: 'meel' | 'warm' | 'blush' | 'donker';
+  size?: 'smal' | 'normaal' | 'breed';
+  class?: string;
+}
+const { id, tone = 'meel', size = 'normaal', class: className } = Astro.props;
+
+const tones = {
+  meel: 'bg-meel text-notenhout',
+  warm: 'bg-meel-warm text-notenhout',
+  blush: 'bg-blush-zacht text-notenhout',
+  donker: 'bg-notenhout text-meel',
+};
+---
+
+<section id={id} class:list={['py-20 md:py-28', tones[tone], className]}>
+  <Container size={size}>
+    <slot />
+  </Container>
+</section>

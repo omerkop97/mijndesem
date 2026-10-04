@@ -1,0 +1,98 @@
+---
+import Container from './Container.astro';
+import Logo from './Logo.astro';
+import Button from './Button.astro';
+import { nav } from '@/data/site';
+
+const huidig = Astro.url.pathname.replace(/\/$/, '') || '/';
+---
+
+<header
+  id="site-header"
+  class="sticky top-0 z-50 border-b border-transparent transition-[background-color,border-color,box-shadow] duration-500 data-[scrolled]:border-linnen data-[scrolled]:bg-meel/90 data-[scrolled]:backdrop-blur-md"
+>
+  <Container size="breed" class="flex h-18 items-center justify-between gap-6 md:h-20">
+    <a href="/" class="rounded-lg" aria-label="Mijn Desem, naar de homepage">
+      <Logo />
+    </a>
+
+    <nav aria-label="Hoofdmenu" class="hidden md:block">
+      <ul class="flex items-center gap-1">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                aria-current={huidig.startsWith(item.href) ? 'page' : undefined}
+                class="hover:text-roest aria-[current=page]:text-roest relative rounded-full px-4 py-2 text-[0.95rem] font-medium transition-colors"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+
+    <div class="flex items-center gap-2">
+      <div class="hidden sm:block">
+        <Button href="/bestellen">Bestellen</Button>
+      </div>
+      <button
+        id="menu-knop"
+        type="button"
+        class="hover:bg-linnen/60 inline-flex size-11 items-center justify-center rounded-full md:hidden"
+        aria-controls="mobiel-menu"
+        aria-expanded="false"
+        aria-label="Menu openen"
+      >
+        <svg class="size-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round">
+          <path class="menu-open" d="M4 8h16M4 16h16"></path>
+          <path class="menu-dicht hidden" d="M6 6l12 12M18 6L6 18"></path>
+        </svg>
+      </button>
+    </div>
+  </Container>
+
+  <div id="mobiel-menu" class="border-linnen bg-meel hidden border-t md:hidden">
+    <Container class="py-6">
+      <ul class="flex flex-col">
+        {
+          nav.map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="border-linnen/70 block border-b py-4 font-serif text-2xl"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <Button href="/bestellen" size="groot" class="mt-6 w-full">Bestellen</Button>
+    </Container>
+  </div>
+</header>
+
+<script>
+  const header = document.getElementById('site-header')!;
+  const knop = document.getElementById('menu-knop')!;
+  const menu = document.getElementById('mobiel-menu')!;
+
+  const opScroll = () => header.toggleAttribute('data-scrolled', window.scrollY > 8);
+  opScroll();
+  window.addEventListener('scroll', opScroll, { passive: true });
+
+  const zetMenu = (open: boolean) => {
+    knop.setAttribute('aria-expanded', String(open));
+    knop.setAttribute('aria-label', open ? 'Menu sluiten' : 'Menu openen');
+    menu.classList.toggle('hidden', !open);
+    knop.querySelector('.menu-open')!.classList.toggle('hidden', open);
+    knop.querySelector('.menu-dicht')!.classList.toggle('hidden', !open);
+    header.toggleAttribute('data-scrolled', open || window.scrollY > 8);
+  };
+  knop.addEventListener('click', () => zetMenu(knop.getAttribute('aria-expanded') !== 'true'));
+  document.addEventListener('keydown', (e) => e.key === 'Escape' && zetMenu(false));
+  matchMedia('(min-width: 768px)').addEventListener('change', () => zetMenu(false));
+</script>
