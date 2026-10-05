@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import type { CollectionEntry } from 'astro:content';
 import { formatEuro } from '@/lib/prijs';
 
@@ -13,29 +13,34 @@ const { naam, kort, prijs, foto, fotoAlt, smaak } = brood.data;
 
 <article class="group relative flex flex-col" data-rijs>
   <div class="bg-linnen relative overflow-hidden rounded-t-[10rem] rounded-b-[var(--radius-kaart)]">
-    <Image
+    <Picture
+      formats={['avif', 'webp']}
+      quality={60}
       src={foto}
       alt={fotoAlt}
       widths={[360, 540, 720]}
       sizes="(min-width: 1024px) 22rem, (min-width: 640px) 45vw, 90vw"
       class="aspect-[4/5] w-full object-cover transition-transform duration-700 ease-(--ease-zacht) group-hover:scale-[1.04]"
     />
-    <p
-      class="bg-meel/90 text-notenhout absolute right-4 bottom-4 rounded-full px-3.5 py-1.5 text-sm font-semibold backdrop-blur"
-    >
+    <p class="bg-meel/90 text-notenhout absolute right-4 bottom-4 rounded-full px-3.5 py-1.5 text-sm font-semibold backdrop-blur">
       {formatEuro(prijs)}
     </p>
   </div>
   <div class="mt-5 flex flex-1 flex-col">
     <Kop class="font-serif text-2xl">
-      <a href={`/broden/${brood.id}`} class="after:absolute after:inset-0 group-hover:text-roest transition-colors">
+      <a
+        href={`/broden/${brood.id}`}
+        class="after:absolute after:inset-0 group-hover:text-roest transition-colors"
+      >
         {naam.replace(' Zuurdesem Brood', '')}
         <span class="sr-only"> zuurdesembrood</span>
       </a>
     </Kop>
     <p class="text-notenhout-zacht mt-2 flex-1">{kort}</p>
     <ul class="mt-4 flex flex-wrap gap-1.5" aria-label="Smaak">
-      {smaak.map((s) => <li class="border-linnen rounded-full border px-2.5 py-0.5 text-xs">{s}</li>)}
+      {smaak.map((s) => (
+        <li class="border-linnen rounded-full border px-2.5 py-0.5 text-xs">{s}</li>
+      ))}
     </ul>
   </div>
 </article>

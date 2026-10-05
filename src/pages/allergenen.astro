@@ -10,7 +10,11 @@ const broden = await getBroden();
 const extras = await getExtras();
 const kolommen = Object.keys(allergeenLabels) as Allergeen[];
 const rijen = [
-  ...broden.map((b) => ({ naam: b.data.naam, allergenen: b.data.allergenen, ingredienten: b.data.ingredienten.join(', ') })),
+  ...broden.map((b) => ({
+    naam: b.data.naam,
+    allergenen: b.data.allergenen,
+    ingredienten: b.data.ingredienten.join(', '),
+  })),
   ...extras.map((e) => ({ naam: e.data.naam, allergenen: e.data.allergenen, ingredienten: '' })),
 ];
 ---
@@ -36,30 +40,43 @@ const rijen = [
         <caption class="sr-only">Allergenen per product</caption>
         <thead>
           <tr class="border-notenhout/20 border-b">
-            <th scope="col" class="py-3 pr-4 font-semibold">Product</th>
-            {kolommen.map((k) => <th scope="col" class="px-2 py-3 text-center font-semibold">{allergeenLabels[k]}</th>)}
+            <th scope="col" class="py-3 pr-4 font-semibold">
+              Product
+            </th>
+            {kolommen.map((k) => (
+              <th scope="col" class="px-2 py-3 text-center font-semibold">
+                {allergeenLabels[k]}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody class="divide-notenhout/10 divide-y">
-          {
-            rijen.map((r) => (
-              <tr>
-                <th scope="row" class="py-3 pr-4 font-normal">
-                  <span class="font-medium">{r.naam}</span>
-                  {r.ingredienten && <span class="text-notenhout-zacht block text-xs">{r.ingredienten}</span>}
-                </th>
-                {kolommen.map((k) => (
-                  <td class="px-2 py-3 text-center">
-                    {r.allergenen.includes(k) ? (
-                      <span class="bg-roest text-meel inline-flex size-6 items-center justify-center rounded-full text-xs" aria-label="bevat">●</span>
-                    ) : (
-                      <span class="text-notenhout/25" aria-label="bevat niet">–</span>
-                    )}
-                  </td>
-                ))}
-              </tr>
-            ))
-          }
+          {rijen.map((r) => (
+            <tr>
+              <th scope="row" class="py-3 pr-4 font-normal">
+                <span class="font-medium">{r.naam}</span>
+                {r.ingredienten && (
+                  <span class="text-notenhout-zacht block text-xs">{r.ingredienten}</span>
+                )}
+              </th>
+              {kolommen.map((k) => (
+                <td class="px-2 py-3 text-center">
+                  {r.allergenen.includes(k) ? (
+                    <span
+                      class="bg-roest text-meel inline-flex size-6 items-center justify-center rounded-full text-xs"
+                      aria-label="bevat"
+                    >
+                      ●
+                    </span>
+                  ) : (
+                    <span class="text-notenhout/25" aria-label="bevat niet">
+                      –
+                    </span>
+                  )}
+                </td>
+              ))}
+            </tr>
+          ))}
         </tbody>
       </table>
     </div>

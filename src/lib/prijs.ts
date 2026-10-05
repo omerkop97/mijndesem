@@ -45,6 +45,9 @@ export function prijsPerBrood(
   alleExtras: ExtraInfo[],
 ): number {
   const ids = normaliseerExtras(gekozenExtras, alleExtras);
-  const extraPrijs = ids.reduce((som, id) => som + (alleExtras.find((e) => e.id === id)?.prijs ?? 0), 0);
+  const extraPrijs = ids.reduce(
+    (som, id) => som + (alleExtras.find((e) => e.id === id)?.prijs ?? 0),
+    0,
+  );
   return broodPrijs + extraPrijs;
 }

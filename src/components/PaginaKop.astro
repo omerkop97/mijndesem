@@ -12,15 +12,19 @@ const { eyebrow, titel } = Astro.props;
 
 <header class="pt-14 pb-14 text-center md:pt-20 md:pb-16">
   <Container size="smal">
-    {eyebrow && <p class="font-hand text-roest text-2xl" data-rijs>{eyebrow}</p>}
-    <h1 class="mt-2 text-4xl sm:text-5xl lg:text-6xl" data-rijs>{titel}</h1>
-    {
-      Astro.slots.has('default') && (
-        <div class="text-notenhout-zacht mx-auto mt-6 max-w-xl text-lg" data-rijs>
-          <slot />
-        </div>
-      )
-    }
+    {eyebrow && (
+      <p class="font-hand text-roest text-2xl">
+        {eyebrow}
+      </p>
+    )}
+    <h1 class="mt-2 text-4xl sm:text-5xl lg:text-6xl">
+      {titel}
+    </h1>
+    {Astro.slots.has('default') && (
+      <div class="text-notenhout-zacht mx-auto mt-6 max-w-xl text-lg">
+        <slot />
+      </div>
+    )}
     <Divider class="text-roest/60 mt-10" />
   </Container>
 </header>

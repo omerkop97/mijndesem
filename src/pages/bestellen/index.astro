@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaginaKop from '@/components/PaginaKop.astro';
 import Container from '@/components/Container.astro';
@@ -45,54 +45,65 @@ const veld =
     <!-- Stap 1 t/m 3: configurator -->
     <form id="configurator" class="space-y-12 lg:col-span-7 lg:row-start-1" novalidate>
       <fieldset>
-        <legend class={stapKop}><span class={stapNr}>1</span>Kies je brood</legend>
+        <legend class={stapKop}>
+          <span class={stapNr}>1</span>Kies je brood
+        </legend>
         <div class="mt-6 grid gap-3 sm:grid-cols-2">
-          {
-            broden.map((b, i) => (
-              <label class="border-notenhout/10 bg-meel hover:border-roest/40 has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-3 pr-5 transition-colors has-[:focus-visible]:ring-4">
-                <input
-                  type="radio"
-                  name="brood"
-                  value={b.id}
-                  class="peer sr-only"
-                  checked={i === 0}
-                  required
-                />
-                <Image src={b.data.foto} alt="" width={128} class="size-16 shrink-0 rounded-full object-cover" />
-                <span class="flex-1">
-                  <span class="block font-medium">{b.data.naam.replace(' Zuurdesem Brood', '')}</span>
-                  <span class="text-notenhout-zacht block text-sm">{b.data.smaak.slice(0, 2).join(', ')}</span>
+          {broden.map((b, i) => (
+            <label class="border-notenhout/10 bg-meel hover:border-roest/40 has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 relative flex cursor-pointer items-center gap-4 rounded-2xl border p-3 pr-5 transition-colors has-[:focus-visible]:ring-4">
+              <input
+                type="radio"
+                name="brood"
+                value={b.id}
+                class="peer sr-only"
+                checked={i === 0}
+                required
+              />
+              <Picture
+                formats={['avif', 'webp']}
+                quality={60}
+                src={b.data.foto}
+                alt=""
+                width={128}
+                class="size-16 shrink-0 rounded-full object-cover"
+              />
+              <span class="flex-1">
+                <span class="block font-medium">{b.data.naam.replace(' Zuurdesem Brood', '')}</span>
+                <span class="text-notenhout-zacht block text-sm">
+                  {b.data.smaak.slice(0, 2).join(', ')}
                 </span>
-                <span class="font-medium tabular-nums">{formatEuro(b.data.prijs)}</span>
-                <HeartIcon class="text-roest absolute top-2 right-2 size-3.5 opacity-0 transition-opacity peer-checked:opacity-100" />
-              </label>
-            ))
-          }
+              </span>
+              <span class="font-medium tabular-nums">{formatEuro(b.data.prijs)}</span>
+              <HeartIcon class="text-roest absolute top-2 right-2 size-3.5 opacity-0 transition-opacity peer-checked:opacity-100" />
+            </label>
+          ))}
         </div>
       </fieldset>
 
       <fieldset>
-        <legend class={stapKop}><span class={stapNr}>2</span>Maak het jouw brood</legend>
-        <p class="text-notenhout-zacht mt-2">Optioneel. Alles is te combineren; de meerprijs geldt per brood.</p>
+        <legend class={stapKop}>
+          <span class={stapNr}>2</span>Maak het jouw brood
+        </legend>
+        <p class="text-notenhout-zacht mt-2">
+          Optioneel. Alles is te combineren; de meerprijs geldt per brood.
+        </p>
         <div class="mt-6 space-y-6">
-          {
-            groepen.map((g) => (
-              <div>
-                <p class="mb-3 text-sm font-semibold tracking-[0.12em] uppercase">{g.titel}</p>
-                <div class="flex flex-wrap gap-2">
-                  {extras
-                    .filter((e) => e.groep === g.id)
-                    .map((e) => (
-                      <label class="border-notenhout/15 bg-meel hover:border-roest/50 has-[:checked]:bg-roest has-[:checked]:text-meel has-[:checked]:border-roest has-[:focus-visible]:ring-roest/30 inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors select-none has-[:focus-visible]:ring-4">
-                        <input type="checkbox" name="extra" value={e.id} class="sr-only" />
-                        {e.naam}
-                        <span class="opacity-70">{formatMeerprijs(e.prijs)}</span>
-                      </label>
-                    ))}
-                </div>
+          {groepen.map((g) => (
+            <div>
+              <p class="mb-3 text-sm font-semibold tracking-[0.12em] uppercase">{g.titel}</p>
+              <div class="flex flex-wrap gap-2">
+                {extras
+                  .filter((e) => e.groep === g.id)
+                  .map((e) => (
+                    <label class="border-notenhout/15 bg-meel hover:border-roest/50 has-[:checked]:bg-roest has-[:checked]:text-meel has-[:checked]:border-roest has-[:focus-visible]:ring-roest/30 inline-flex cursor-pointer items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors select-none has-[:focus-visible]:ring-4">
+                      <input type="checkbox" name="extra" value={e.id} class="sr-only" />
+                      {e.naam}
+                      <span class="opacity-70">{formatMeerprijs(e.prijs)}</span>
+                    </label>
+                  ))}
               </div>
-            ))
-          }
+            </div>
+          ))}
           <p id="combi-hint" class="text-klimop hidden text-sm" role="status">
             Rozijnen en hazelnoten samen zijn voordeliger. We hebben de combinatie voor je gekozen.
           </p>
@@ -100,10 +111,19 @@ const veld =
       </fieldset>
 
       <fieldset>
-        <legend class={stapKop}><span class={stapNr}>3</span>Hoeveel?</legend>
+        <legend class={stapKop}>
+          <span class={stapNr}>3</span>Hoeveel?
+        </legend>
         <div class="mt-6 flex flex-wrap items-center gap-4 sm:gap-6">
           <div class="border-notenhout/15 bg-meel inline-flex items-center rounded-full border">
-            <button type="button" data-aantal="-1" class="hover:text-roest size-12 rounded-full text-xl" aria-label="Eén minder">−</button>
+            <button
+              type="button"
+              data-aantal="-1"
+              class="hover:text-roest size-12 rounded-full text-xl"
+              aria-label="Eén minder"
+            >
+              −
+            </button>
             <input
               id="aantal"
               name="aantal"
@@ -115,10 +135,19 @@ const veld =
               class="w-12 [appearance:textfield] bg-transparent text-center text-lg font-medium outline-none [&::-webkit-inner-spin-button]:appearance-none"
               aria-label="Aantal broden"
             />
-            <button type="button" data-aantal="1" class="hover:text-roest size-12 rounded-full text-xl" aria-label="Eén meer">+</button>
+            <button
+              type="button"
+              data-aantal="1"
+              class="hover:text-roest size-12 rounded-full text-xl"
+              aria-label="Eén meer"
+            >
+              +
+            </button>
           </div>
           <p class="text-notenhout-zacht">
-            <span id="regel-prijs" class="text-notenhout text-2xl font-medium tabular-nums">{formatEuro(broden[0].data.prijs)}</span>
+            <span id="regel-prijs" class="text-notenhout text-2xl font-medium tabular-nums">
+              {formatEuro(broden[0].data.prijs)}
+            </span>
           </p>
           <button
             type="submit"
@@ -136,18 +165,29 @@ const veld =
       aria-labelledby="mandje-titel"
     >
       <div class="bg-meel-warm shadow-zacht rounded-[var(--radius-kaart)] p-6 sm:p-8 lg:sticky lg:top-28">
-        <h2 id="mandje-titel" class="font-serif text-2xl">Jouw bestelling</h2>
+        <h2 id="mandje-titel" class="font-serif text-2xl">
+          Jouw bestelling
+        </h2>
         <p id="mandje-leeg" class="text-notenhout-zacht mt-4">
           Nog leeg. Kies een brood en voeg het toe.
         </p>
         <ul id="mandje-lijst" class="divide-notenhout/10 mt-4 divide-y" aria-live="polite"></ul>
-        <div id="mandje-totaal" class="border-notenhout/15 mt-2 hidden items-baseline justify-between border-t pt-4">
+        <div
+          id="mandje-totaal"
+          class="border-notenhout/15 mt-2 hidden items-baseline justify-between border-t pt-4"
+        >
           <span class="font-semibold">Totaal</span>
           <span id="totaal-bedrag" class="text-2xl font-semibold tabular-nums"></span>
         </div>
         <ul class="text-notenhout-zacht mt-6 space-y-1.5 text-sm">
-          <li class="flex gap-2"><HeartIcon class="text-roest mt-1 size-3 shrink-0" />Ophalen in {site.city}, tijd in overleg</li>
-          <li class="flex gap-2"><HeartIcon class="text-roest mt-1 size-3 shrink-0" />Betalen via Tikkie of contant</li>
+          <li class="flex gap-2">
+            <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
+            Ophalen in {site.city}, tijd in overleg
+          </li>
+          <li class="flex gap-2">
+            <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
+            Betalen via Tikkie of contant
+          </li>
         </ul>
       </div>
     </aside>
@@ -158,7 +198,9 @@ const veld =
       class="border-linnen space-y-6 border-t pt-12 lg:col-span-7 lg:row-start-2"
       novalidate
     >
-      <h2 class={stapKop}><span class={stapNr}>4</span>Jouw gegevens</h2>
+      <h2 class={stapKop}>
+        <span class={stapNr}>4</span>Jouw gegevens
+      </h2>
 
       <div class="grid gap-5 sm:grid-cols-2">
         <label class="block sm:col-span-2">
@@ -171,7 +213,14 @@ const veld =
         </label>
         <label class="block">
           <span class="text-sm font-medium">Telefoon (WhatsApp)</span>
-          <input name="telefoon" type="tel" required autocomplete="tel" pattern="[0-9 +()\-]{10,}" class={veld} />
+          <input
+            name="telefoon"
+            type="tel"
+            required
+            autocomplete="tel"
+            pattern="[0-9 +()\-]{10,}"
+            class={veld}
+          />
         </label>
         <label class="block">
           <span class="text-sm font-medium">Ophaaldag</span>
@@ -179,7 +228,9 @@ const veld =
           <span id="ophaaldag-tekst" class="text-notenhout-zacht mt-1 block text-sm"></span>
         </label>
         <label class="block">
-          <span class="text-sm font-medium">Voorkeurstijd <span class="text-notenhout-zacht font-normal">(optioneel)</span></span>
+          <span class="text-sm font-medium">
+            Voorkeurstijd <span class="text-notenhout-zacht font-normal">(optioneel)</span>
+          </span>
           <input name="voorkeurstijd" placeholder="bijv. na 17:00" class={veld} />
         </label>
       </div>
@@ -187,31 +238,43 @@ const veld =
       <fieldset>
         <legend class="text-sm font-medium">Hoe wil je betalen?</legend>
         <div class="mt-2 grid gap-3 sm:grid-cols-2">
-          {
-            [
-              { v: 'tikkie', t: 'Via Tikkie', s: 'Je ontvangt een betaalverzoek' },
-              { v: 'contant', t: 'Contant', s: 'Bij het ophalen' },
-            ].map((o, i) => (
-              <label class="border-notenhout/15 bg-meel has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 flex cursor-pointer items-start gap-3 rounded-xl border p-4 has-[:focus-visible]:ring-4">
-                <input type="radio" name="betaalwijze" value={o.v} checked={i === 0} class="accent-roest mt-1" />
-                <span>
-                  <span class="block font-medium">{o.t}</span>
-                  <span class="text-notenhout-zacht text-sm">{o.s}</span>
-                </span>
-              </label>
-            ))
-          }
+          {[
+            { v: 'tikkie', t: 'Via Tikkie', s: 'Je ontvangt een betaalverzoek' },
+            { v: 'contant', t: 'Contant', s: 'Bij het ophalen' },
+          ].map((o, i) => (
+            <label class="border-notenhout/15 bg-meel has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 flex cursor-pointer items-start gap-3 rounded-xl border p-4 has-[:focus-visible]:ring-4">
+              <input
+                type="radio"
+                name="betaalwijze"
+                value={o.v}
+                checked={i === 0}
+                class="accent-roest mt-1"
+              />
+              <span>
+                <span class="block font-medium">{o.t}</span>
+                <span class="text-notenhout-zacht text-sm">{o.s}</span>
+              </span>
+            </label>
+          ))}
         </div>
       </fieldset>
 
       <label class="block">
-        <span class="text-sm font-medium">Opmerking <span class="text-notenhout-zacht font-normal">(optioneel)</span></span>
-        <textarea name="opmerking" rows="3" class={veld} placeholder="Bijvoorbeeld een allergie of een speciaal verzoek"></textarea>
+        <span class="text-sm font-medium">
+          Opmerking <span class="text-notenhout-zacht font-normal">(optioneel)</span>
+        </span>
+        <textarea
+          name="opmerking"
+          rows="3"
+          class={veld}
+          placeholder="Bijvoorbeeld een allergie of een speciaal verzoek"
+        ></textarea>
       </label>
 
       <!-- Honeypot tegen spam -->
       <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
 
+      <!-- prettier-ignore -->
       <p class="text-notenhout-zacht text-sm">
         Door te bestellen ga je akkoord met de <a href="/voorwaarden" class="text-roest underline underline-offset-4">voorwaarden</a>.
         Bekijk ook de <a href="/allergenen" class="text-roest underline underline-offset-4">allergeneninformatie</a>.
@@ -227,13 +290,15 @@ const veld =
         >
           Plaats bestelling
         </button>
-        {
-          config.whatsapp && config.web3formsKey && (
-            <button id="via-whatsapp" type="button" class="text-roest font-medium underline underline-offset-4">
-              of verstuur via WhatsApp
-            </button>
-          )
-        }
+        {config.whatsapp && config.web3formsKey && (
+          <button
+            id="via-whatsapp"
+            type="button"
+            class="text-roest font-medium underline underline-offset-4"
+          >
+            of verstuur via WhatsApp
+          </button>
+        )}
       </div>
     </form>
   </Container>
@@ -277,18 +342,23 @@ const veld =
   const params = new URLSearchParams(location.search);
   const voorkeur = params.get('brood');
   if (voorkeur) {
-    const radio = configurator.querySelector<HTMLInputElement>(`input[name=brood][value="${CSS.escape(voorkeur)}"]`);
+    const radio = configurator.querySelector<HTMLInputElement>(
+      `input[name=brood][value="${CSS.escape(voorkeur)}"]`,
+    );
     if (radio) radio.checked = true;
   }
 
-  const gekozenBrood = () => configurator.querySelector<HTMLInputElement>('input[name=brood]:checked')?.value ?? '';
+  const gekozenBrood = () =>
+    configurator.querySelector<HTMLInputElement>('input[name=brood]:checked')?.value ?? '';
   const gekozenExtras = () => extraBoxes.filter((b) => b.checked).map((b) => b.value);
   const leesAantal = () => Math.min(MAX_AANTAL, Math.max(1, parseInt(aantalInput.value, 10) || 1));
 
   function werkRegelPrijsBij() {
     const brood = cat.broden.find((b) => b.id === gekozenBrood());
     if (!brood) return;
-    $('regel-prijs').textContent = formatEuro(prijsPerBrood(brood.prijs, gekozenExtras(), cat.extras) * leesAantal());
+    $('regel-prijs').textContent = formatEuro(
+      prijsPerBrood(brood.prijs, gekozenExtras(), cat.extras) * leesAantal(),
+    );
   }
 
   // Combi-regel zichtbaar maken: losse rozijnen + hazelnoten => combi, combi => losse uit.
@@ -306,7 +376,9 @@ const veld =
 
   configurator.querySelectorAll<HTMLButtonElement>('[data-aantal]').forEach((knop) =>
     knop.addEventListener('click', () => {
-      aantalInput.value = String(Math.min(MAX_AANTAL, Math.max(1, leesAantal() + Number(knop.dataset.aantal))));
+      aantalInput.value = String(
+        Math.min(MAX_AANTAL, Math.max(1, leesAantal() + Number(knop.dataset.aantal))),
+      );
       werkRegelPrijsBij();
     }),
   );
@@ -338,7 +410,8 @@ const veld =
       ...mandje.map((r, i) => {
         const { brood, extras } = regelOmschrijving(r, cat);
         const li = document.createElement('li');
-        li.className = 'flex items-start gap-4 py-4' + (net && i === mandje.length - 1 ? ' animate-rijzen' : '');
+        li.className =
+          'flex items-start gap-4 py-4' + (net && i === mandje.length - 1 ? ' animate-rijzen' : '');
         li.innerHTML = `
           <span class="bg-meel flex h-8 min-w-8 items-center justify-center rounded-full px-2 text-sm font-semibold tabular-nums"></span>
           <span class="flex-1"><span class="block font-medium"></span><span class="text-notenhout-zacht block text-sm"></span></span>
@@ -411,7 +484,9 @@ const veld =
     }
     const klant = leesKlant();
     if (!ophaaldagToegestaan(klant.ophaaldag)) {
-      toonMelding(`Kies een ophaaldag vanaf ${formatDatum(eersteOphaaldag())}. Je brood heeft 3 dagen nodig.`);
+      toonMelding(
+        `Kies een ophaaldag vanaf ${formatDatum(eersteOphaaldag())}. Je brood heeft 3 dagen nodig.`,
+      );
       dagInput.focus();
       return null;
     }
@@ -422,7 +497,13 @@ const veld =
     try {
       sessionStorage.setItem(
         'mijndesem-laatste-bestelling',
-        JSON.stringify({ tekst, naam: klant.naam, ophaaldag: klant.ophaaldag, betaalwijze: klant.betaalwijze, testmodus }),
+        JSON.stringify({
+          tekst,
+          naam: klant.naam,
+          ophaaldag: klant.ophaaldag,
+          betaalwijze: klant.betaalwijze,
+          testmodus,
+        }),
       );
     } catch {}
     mandje = [];
@@ -431,7 +512,11 @@ const veld =
   }
 
   function viaWhatsApp(klant: Klant, tekst: string) {
-    window.open(`https://wa.me/${config.whatsapp}?text=${encodeURIComponent(tekst)}`, '_blank', 'noopener');
+    window.open(
+      `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(tekst)}`,
+      '_blank',
+      'noopener',
+    );
     afronden(klant, tekst);
   }
 
@@ -440,7 +525,12 @@ const veld =
     if ((formulier.elements.namedItem('botcheck') as HTMLInputElement).checked) return;
     const klant = controleer();
     if (!klant) return;
-    const tekst = bestelTekst(mandje, klant, cat, formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`)));
+    const tekst = bestelTekst(
+      mandje,
+      klant,
+      cat,
+      formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`)),
+    );
 
     if (config.web3formsKey) {
       const knop = $<HTMLButtonElement>('verstuur');
@@ -484,7 +574,11 @@ const veld =
 
   document.getElementById('via-whatsapp')?.addEventListener('click', () => {
     const klant = controleer();
-    if (klant) viaWhatsApp(klant, bestelTekst(mandje, klant, cat, formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`))));
+    if (klant)
+      viaWhatsApp(
+        klant,
+        bestelTekst(mandje, klant, cat, formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`))),
+      );
   });
 
   werkRegelPrijsBij();

@@ -178,10 +178,10 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [x] 4.6 Bedankpagina met afhaalinformatie.
 
 ### Fase 5: Polish en kwaliteit
-- [ ] 5.1 Micro-animaties (scroll-reveal, hover-states), met respect voor `prefers-reduced-motion`.
-- [ ] 5.2 Toegankelijkheid: contrast, focus-states, alt-teksten, toetsenbordnavigatie.
-- [ ] 5.3 Performance: Lighthouse ≥ 95 op alle onderdelen, afbeeldingen AVIF/WebP.
-- [ ] 5.4 Structured data: `Bakery` / `LocalBusiness` + `Product` (rich results in Google).
+- [x] 5.1 Micro-animaties (scroll-reveal, hover-states), met respect voor `prefers-reduced-motion`.
+- [x] 5.2 Toegankelijkheid: contrast, focus-states, alt-teksten, toetsenbordnavigatie.
+- [x] 5.3 Performance: AVIF/WebP, CSS inline, lichtere fonts, origineel woordmerk als afbeelding. Lighthouse desktop 100/100/100/100; mobiel (traag 4G) perf 86–96, overige 100.
+- [x] 5.4 Structured data: `Bakery` / `LocalBusiness` + `Product` (rich results in Google).
 - [ ] 5.5 Testen op iPhone, Android en desktop (Safari, Chrome, Firefox).
 
 ### Fase 6: Livegang

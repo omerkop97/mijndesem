@@ -37,38 +37,35 @@ const juridisch = [
       <nav aria-label="Footermenu" class="md:col-span-3">
         <h2 class="mb-4 font-sans text-sm font-semibold tracking-[0.14em] uppercase">Menu</h2>
         <ul class="space-y-2">
-          {
-            [{ href: '/bestellen', label: 'Bestellen' }, ...nav].map((item) => (
-              <li>
-                <a href={item.href} class="hover:text-roest-donker underline-offset-4 hover:underline">
-                  {item.label}
-                </a>
-              </li>
-            ))
-          }
+          {[{ href: '/bestellen', label: 'Bestellen' }, ...nav].map((item) => (
+            <li>
+              <a
+                href={item.href}
+                class="hover:text-roest-donker underline-offset-4 hover:underline"
+              >
+                {item.label}
+              </a>
+            </li>
+          ))}
         </ul>
       </nav>
     </div>
 
     <Divider class="text-roest-donker/50 mt-14" />
 
-    <div
-      class="text-notenhout/70 mt-8 flex flex-col items-center justify-between gap-4 text-sm sm:flex-row"
-    >
+    <div class="text-notenhout/85 mt-8 flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
       <p>
         {`© ${jaar} ${site.name}`}
         {site.kvk && <span> · KvK {site.kvk}</span>}
       </p>
       <ul class="flex gap-5">
-        {
-          juridisch.map((item) => (
-            <li>
-              <a href={item.href} class="hover:text-notenhout underline-offset-4 hover:underline">
-                {item.label}
-              </a>
-            </li>
-          ))
-        }
+        {juridisch.map((item) => (
+          <li>
+            <a href={item.href} class="hover:text-notenhout underline-offset-4 hover:underline">
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
     </div>
   </Container>

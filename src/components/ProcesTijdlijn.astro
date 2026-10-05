@@ -1,6 +1,6 @@
 ---
 // Van starter tot brood in 3 dagen: de reden achter de besteltermijn, als verhaal.
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import starter from '@/assets/photos/starter-in-pot.jpg';
 import deeg from '@/assets/photos/deeg-rijst-onder-doek.jpg';
 import brood from '@/assets/photos/hartjesbrood-rijsmand.jpg';
@@ -9,21 +9,24 @@ const stappen = [
   {
     dag: 'Dag 1',
     titel: 'De starter wordt gevoed',
-    tekst: 'Mijn zelfgekweekte starter krijgt verse bloem en water en wordt wakker gemaakt voor jouw brood.',
+    tekst:
+      'Mijn zelfgekweekte starter krijgt verse bloem en water en wordt wakker gemaakt voor jouw brood.',
     foto: starter,
     alt: 'Een bruisende zuurdesemstarter die over de rand van een glazen pot borrelt',
   },
   {
     dag: 'Dag 2',
     titel: 'Deeg maken en rijzen',
-    tekst: 'Het deeg wordt met de hand gemaakt, gevouwen en mag daarna langzaam rijzen. Hier ontstaat de smaak.',
+    tekst:
+      'Het deeg wordt met de hand gemaakt, gevouwen en mag daarna langzaam rijzen. Hier ontstaat de smaak.',
     foto: deeg,
     alt: 'Een bol deeg met zaden rijst in een mand, half bedekt met een geborduurde theedoek',
   },
   {
     dag: 'Dag 3',
     titel: 'Bakken en ophalen',
-    tekst: 'Insnijden, een hartje van bloem, de oven in. Vers en nog geurend ligt jouw brood voor je klaar.',
+    tekst:
+      'Insnijden, een hartje van bloem, de oven in. Vers en nog geurend ligt jouw brood voor je klaar.',
     foto: brood,
     alt: 'Een vers gebakken zuurdesembrood met hartjes van bloem op de korst',
   },
@@ -34,18 +37,22 @@ const stappen = [
   <div
     class="border-roest/30 absolute top-[7.5rem] right-[16%] left-[16%] hidden border-t border-dashed md:block"
     aria-hidden="true"
-  >
-  </div>
-  {
-    stappen.map((s, i) => (
-      <li class="relative text-center" data-rijs style={`transition-delay:${i * 120}ms`}>
-        <div class="border-meel shadow-zacht relative mx-auto size-60 overflow-hidden rounded-full border-[6px]">
-          <Image src={s.foto} alt={s.alt} width={480} class="size-full object-cover" />
-        </div>
-        <p class="font-hand text-roest mt-6 text-2xl">{s.dag}</p>
-        <h3 class="mt-1 font-serif text-2xl">{s.titel}</h3>
-        <p class="text-notenhout-zacht mx-auto mt-3 max-w-xs">{s.tekst}</p>
-      </li>
-    ))
-  }
+  ></div>
+  {stappen.map((s) => (
+    <li class="relative text-center" data-rijs>
+      <div class="border-meel shadow-zacht relative mx-auto size-60 overflow-hidden rounded-full border-[6px]">
+        <Picture
+          formats={['avif', 'webp']}
+          quality={60}
+          src={s.foto}
+          alt={s.alt}
+          width={480}
+          class="size-full object-cover"
+        />
+      </div>
+      <p class="font-hand text-roest mt-6 text-2xl">{s.dag}</p>
+      <h3 class="mt-1 font-serif text-2xl">{s.titel}</h3>
+      <p class="text-notenhout-zacht mx-auto mt-3 max-w-xs">{s.tekst}</p>
+    </li>
+  ))}
 </ol>

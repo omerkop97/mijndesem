@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaginaKop from '@/components/PaginaKop.astro';
 import Section from '@/components/Section.astro';
@@ -12,10 +12,24 @@ import tafel from '@/assets/photos/broden-bovenaanzicht-notenhout.jpg';
 import { site } from '@/data/site';
 
 const waarden = [
-  { titel: 'Puur', tekst: 'Meel, water, zout en zuurdesem. Geen bakkersgist, geen broodverbeteraars, geen E-nummers.' },
-  { titel: 'Geduld', tekst: 'Elk brood krijgt de tijd die het nodig heeft. Daarom bestel je 3 dagen van tevoren.' },
-  { titel: 'Met de hand', tekst: 'Elk deeg wordt met de hand gevouwen, gevormd en ingesneden. Geen brood is precies hetzelfde.' },
-  { titel: 'Dichtbij', tekst: `Gebakken in een thuisbakkerij in ${site.city}, en persoonlijk aan jou meegegeven.` },
+  {
+    titel: 'Puur',
+    tekst:
+      'Meel, water, zout en zuurdesem. Geen bakkersgist, geen broodverbeteraars, geen E-nummers.',
+  },
+  {
+    titel: 'Geduld',
+    tekst: 'Elk brood krijgt de tijd die het nodig heeft. Daarom bestel je 3 dagen van tevoren.',
+  },
+  {
+    titel: 'Met de hand',
+    tekst:
+      'Elk deeg wordt met de hand gevouwen, gevormd en ingesneden. Geen brood is precies hetzelfde.',
+  },
+  {
+    titel: 'Dichtbij',
+    tekst: `Gebakken in een thuisbakkerij in ${site.city}, en persoonlijk aan jou meegegeven.`,
+  },
 ];
 ---
 
@@ -30,7 +44,9 @@ const waarden = [
   <Section class="!pt-0">
     <div class="grid items-center gap-12 md:grid-cols-2 md:gap-16">
       <div class="relative mx-auto w-full max-w-md" data-rijs>
-        <Image
+        <Picture
+          formats={['avif', 'webp']}
+          quality={60}
           src={foto}
           alt="Een vers gebakken zuurdesembrood met hartjes van bloem, in een rieten rijsmand in de tuin"
           widths={[400, 640, 900]}
@@ -44,15 +60,17 @@ const waarden = [
           Mijn Desem begon met een glazen pot, wat meel, water en heel veel nieuwsgierigheid.
         </p>
         <p class="text-notenhout-zacht" data-rijs>
-          Dag na dag voeden, kijken, ruiken en wachten. Tot de starter op een ochtend bruisend over de
-          rand van de pot kwam. Vanaf dat moment was er geen weg terug.
+          Dag na dag voeden, kijken, ruiken en wachten. Tot de starter op een ochtend bruisend over
+          de rand van de pot kwam. Vanaf dat moment was er geen weg terug.
         </p>
         <p class="text-notenhout-zacht" data-rijs>
           Wat begon als bakken voor familie en vrienden, groeide uit tot Mijn Desem: een kleine
           thuisbakkerij in {site.city} waar elk brood nog met de hand en met aandacht wordt gemaakt.
           Precies zoals brood bedoeld is.
         </p>
-        <p class="font-hand text-roest text-2xl" data-rijs>Met liefde gebakken ♡</p>
+        <p class="font-hand text-roest text-2xl" data-rijs>
+          Met liefde gebakken ♡
+        </p>
       </div>
     </div>
   </Section>
@@ -68,7 +86,9 @@ const waarden = [
     <div class="grid gap-14 lg:grid-cols-12">
       <div class="lg:col-span-5">
         <Heading eyebrow="Waar we voor staan" title="Eerlijk brood, zonder omwegen" />
-        <Image
+        <Picture
+          formats={['avif', 'webp']}
+          quality={60}
           src={tafel}
           alt="Twee zuurdesembroden met insnijdingen in een rijsmand op een geborduurde doek, van bovenaf gezien"
           widths={[400, 640, 800]}
@@ -77,15 +97,13 @@ const waarden = [
         />
       </div>
       <ul class="grid gap-6 sm:grid-cols-2 lg:col-span-7">
-        {
-          waarden.map((w) => (
-            <li class="bg-meel-warm rounded-[var(--radius-kaart)] p-8" data-rijs>
-              <HeartIcon class="text-roest size-5" />
-              <h3 class="mt-4 font-serif text-2xl">{w.titel}</h3>
-              <p class="text-notenhout-zacht mt-2">{w.tekst}</p>
-            </li>
-          ))
-        }
+        {waarden.map((w) => (
+          <li class="bg-meel-warm rounded-[var(--radius-kaart)] p-8" data-rijs>
+            <HeartIcon class="text-roest size-5" />
+            <h3 class="mt-4 font-serif text-2xl">{w.titel}</h3>
+            <p class="text-notenhout-zacht mt-2">{w.tekst}</p>
+          </li>
+        ))}
       </ul>
     </div>
   </Section>

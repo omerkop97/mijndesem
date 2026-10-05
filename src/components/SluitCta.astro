@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import Container from './Container.astro';
 import Button from './Button.astro';
 import BestelMoment from './BestelMoment.astro';
@@ -20,12 +20,16 @@ const { titel = 'Zin in echt brood?' } = Astro.props;
         Stel je brood samen en kies je ophaaldag. Drie dagen later ligt het vers voor je klaar.
       </p>
       <div class="mt-8 flex flex-wrap items-center gap-4">
-        <Button href="/bestellen" variant="licht" size="groot">Bestel je brood</Button>
+        <Button href="/bestellen" variant="licht" size="groot">
+          Bestel je brood
+        </Button>
       </div>
       <BestelMoment class="text-notenhout mt-6" />
     </div>
     <div class="relative mx-auto w-full max-w-sm md:ml-auto" data-rijs>
-      <Image
+      <Picture
+        formats={['avif', 'webp']}
+        quality={60}
         src={foto}
         alt="Twee vers gebakken zuurdesembroden in een rieten rijsmand, buiten in de zon"
         widths={[400, 640, 800]}

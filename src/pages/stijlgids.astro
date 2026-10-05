@@ -26,7 +26,10 @@ const kleuren = [
 <BaseLayout title="Stijlgids" noindex>
   <Section>
     <Heading level={1} eyebrow="Intern" title="Stijlgids Mijn Desem">
-      <p>Alle kleuren, lettertypes en basiscomponenten bij elkaar. Pas tokens aan in <code>src/styles/global.css</code>.</p>
+      <p>
+        Alle kleuren, lettertypes en basiscomponenten bij elkaar. Pas tokens aan in{' '}
+        <code>src/styles/global.css</code>.
+      </p>
     </Heading>
 
     <div class="mt-14 flex justify-center rounded-[var(--radius-kaart)] bg-blush py-14">
@@ -37,18 +40,18 @@ const kleuren = [
   <Section tone="warm">
     <Heading title="Kleuren" />
     <ul class="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-      {
-        kleuren.map((k) => (
-          <li class="bg-meel shadow-zacht overflow-hidden rounded-2xl">
-            <div class="border-linnen h-24 border-b" style={`background:${k.hex}`} />
-            <div class="p-4 text-sm">
-              <p class="font-semibold">{k.naam}</p>
-              <p class="text-notenhout-zacht">{k.rol}</p>
-              <p class="mt-1 font-mono text-xs">{k.hex} · {k.token}</p>
-            </div>
-          </li>
-        ))
-      }
+      {kleuren.map((k) => (
+        <li class="bg-meel shadow-zacht overflow-hidden rounded-2xl">
+          <div class="border-linnen h-24 border-b" style={`background:${k.hex}`} />
+          <div class="p-4 text-sm">
+            <p class="font-semibold">{k.naam}</p>
+            <p class="text-notenhout-zacht">{k.rol}</p>
+            <p class="mt-1 font-mono text-xs">
+              {k.hex} · {k.token}
+            </p>
+          </div>
+        </li>
+      ))}
     </ul>
   </Section>
 
@@ -57,7 +60,9 @@ const kleuren = [
     <div class="mt-10 space-y-8">
       <div>
         <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Fraunces · koppen</p>
-        <p class="font-serif text-5xl">Langzaam gerezen, <em class="text-roest">met liefde</em> gebakken</p>
+        <p class="font-serif text-5xl">
+          Langzaam gerezen, <em class="text-roest">met liefde</em> gebakken
+        </p>
       </div>
       <div>
         <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Inter · lopende tekst</p>
@@ -67,12 +72,16 @@ const kleuren = [
         </p>
       </div>
       <div>
-        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Caveat · handschrift-accent</p>
+        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">
+          Caveat · handschrift-accent
+        </p>
         <p class="font-hand text-roest text-3xl">vers uit de oven ♡</p>
       </div>
       <div>
-        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">Great Vibes · alleen het logo (tijdelijk)</p>
-        <p class="font-script text-6xl">Mijn Desem</p>
+        <p class="text-notenhout-zacht text-xs tracking-widest uppercase">
+          Logo · origineel woordmerk als afbeelding (geen lettertype nodig)
+        </p>
+        <Logo class="mt-3" />
       </div>
     </div>
   </Section>
@@ -95,7 +104,11 @@ const kleuren = [
 
   <Section tone="donker">
     <Heading eyebrow="Sectie-variant" title="Donkere sectie voor contrast" />
-    <p class="text-meel/75 mt-5 max-w-xl">Bijvoorbeeld voor het verhaal van de starter of een afsluitende call-to-action.</p>
-    <Button variant="licht" class="mt-8">Bestellen</Button>
+    <p class="text-meel/75 mt-5 max-w-xl">
+      Bijvoorbeeld voor het verhaal van de starter of een afsluitende call-to-action.
+    </p>
+    <Button variant="licht" class="mt-8">
+      Bestellen
+    </Button>
   </Section>
 </BaseLayout>

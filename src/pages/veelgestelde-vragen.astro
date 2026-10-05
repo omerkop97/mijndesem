@@ -14,10 +14,13 @@ const faq = await getFaq();
   description="Antwoorden over bestellen, ophalen, betalen, allergenen en het bewaren van zuurdesembrood van Mijn Desem."
 >
   <PaginaKop eyebrow="Goed om te weten" titel="Veelgestelde vragen">
-    <p>Staat je vraag er niet bij? <a href="/contact" class="text-roest underline underline-offset-4">Neem gerust contact op</a>.</p>
+    <!-- prettier-ignore -->
+    <p>
+      Staat je vraag er niet bij? <a href="/contact" class="text-roest underline underline-offset-4">Neem gerust contact op</a>.
+    </p>
   </PaginaKop>
   <Container size="smal" class="pb-24">
-    <FaqLijst items={faq} />
+    <FaqLijst items={faq} metSchema />
   </Container>
   <SluitCta />
 </BaseLayout>

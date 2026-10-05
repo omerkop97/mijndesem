@@ -1,0 +1,24 @@
+---
+import { Image } from 'astro:assets';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/Container.astro';
+import Button from '@/components/Button.astro';
+import brood from '@/assets/brand/brood-illustratie.png';
+---
+
+<BaseLayout title="Pagina niet gevonden" noindex>
+  <Container size="smal" class="py-24 text-center md:py-32">
+    <Image src={brood} alt="" width={200} quality={65} class="mx-auto w-36 opacity-90" />
+    <p class="font-hand text-roest mt-8 text-2xl">Oeps, foutje 404</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Deze pagina is nog aan het rijzen</h1>
+    <p class="text-notenhout-zacht mx-auto mt-5 max-w-md text-lg">
+      Of hij bestaat niet. Gelukkig liggen de broden gewoon voor je klaar.
+    </p>
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <Button href="/broden">Bekijk de broden</Button>
+      <Button href="/" variant="secundair">
+        Naar home
+      </Button>
+    </div>
+  </Container>
+</BaseLayout>

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { Picture } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/Container.astro';
 import Button from '@/components/Button.astro';
@@ -18,35 +18,52 @@ import FaqLijst from '@/components/FaqLijst.astro';
 import SluitCta from '@/components/SluitCta.astro';
 import { getBroden, getFaq, getReviews } from '@/lib/catalogus';
 import { formatEuro } from '@/lib/prijs';
+import { bakkerij, website } from '@/lib/schema';
+import { getImage } from 'astro:assets';
 import { site } from '@/data/site';
 
 const broden = await getBroden();
 const faq = await getFaq({ alleenHome: true });
 const reviews = await getReviews();
+const heroAfbeelding = new URL(
+  (await getImage({ src: heroFoto, width: 1200, format: 'jpg' })).src,
+  Astro.site,
+).href;
+const minPrijs = Math.min(...broden.map((b) => b.data.prijs));
+const maxPrijs = Math.max(...broden.map((b) => b.data.prijs));
 
 const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de hand gemaakt'];
 ---
 
-<BaseLayout>
+<BaseLayout
+  schema={[
+    website(Astro.site),
+    bakkerij(Astro.site, { afbeelding: heroAfbeelding, prijsVan: minPrijs, prijsTot: maxPrijs }),
+  ]}
+>
   <section class="relative overflow-hidden pt-6 pb-20 md:pt-10 md:pb-28">
     <Container size="breed" class="grid items-center gap-14 lg:grid-cols-12 lg:gap-10">
       <div class="lg:col-span-6 xl:col-span-5">
-        <p class="font-hand text-roest text-2xl" data-rijs>Vers gebakken in {site.city}</p>
+        <p class="font-hand text-roest text-2xl">
+          Vers gebakken in {site.city}
+        </p>
         <h1
           class="mt-3 text-[2.6rem] leading-[1.05] sm:text-6xl lg:text-[3.4rem] xl:text-[4.1rem]"
-          style="font-variation-settings: 'SOFT' 100;"
-          data-rijs
         >
           Echt zuurdesembrood. <em class="text-roest font-normal">Langzaam</em> gerezen.
         </h1>
-        <p class="text-notenhout-zacht mt-6 max-w-lg text-lg" data-rijs>
+        <p class="text-notenhout-zacht mt-6 max-w-lg text-lg">
           Elk brood begint drie dagen voordat je het ophaalt: met mijn eigen starter, bloem, water
           en zout. Meer is er niet nodig.
         </p>
 
-        <div class="mt-9 flex flex-wrap gap-3" data-rijs>
-          <Button href="/bestellen" size="groot">Stel je brood samen</Button>
-          <Button href="/broden" size="groot" variant="secundair">Bekijk de broden</Button>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <Button href="/bestellen" size="groot">
+            Stel je brood samen
+          </Button>
+          <Button href="/broden" size="groot" variant="secundair">
+            Bekijk de broden
+          </Button>
         </div>
 
         <BestelMoment class="mt-8" />
@@ -56,31 +73,30 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
         <div
           class="bg-blush-zacht absolute -top-10 -right-24 -z-10 size-[28rem] rounded-full blur-3xl sm:size-[36rem]"
           aria-hidden="true"
-        >
-        </div>
-        <div class="relative mx-auto max-w-md lg:ml-auto lg:max-w-[30rem]" data-rijs>
-          <Image
+        ></div>
+        <div class="relative mx-auto max-w-md lg:ml-auto lg:max-w-[30rem]">
+          <Picture
+            formats={['avif', 'webp']}
+            quality={60}
             src={heroFoto}
             alt="Een vers gebakken zuurdesembrood met een diepe insnijding, gewikkeld in een roestbruine linnen doek voor een gele bakstenen muur"
-            widths={[480, 720, 960, 1200]}
+            widths={[480, 720, 960]}
             sizes="(min-width: 1024px) 30rem, (min-width: 640px) 28rem, 90vw"
             class="shadow-diep aspect-[4/5] w-full rounded-t-full rounded-b-[var(--radius-kaart)] object-cover"
             loading="eager"
             fetchpriority="high"
           />
-          <figure
-            class="shadow-diep border-meel absolute -bottom-8 left-3 w-32 rotate-[-4deg] overflow-hidden rounded-2xl border-4 sm:-left-14 sm:w-44 lg:-left-6 xl:-left-14"
-          >
-            <Image
+          <figure class="shadow-diep border-meel absolute -bottom-8 left-3 w-32 rotate-[-4deg] overflow-hidden rounded-2xl border-4 sm:-left-14 sm:w-44 lg:-left-6 xl:-left-14">
+            <Picture
+              formats={['avif', 'webp']}
+              quality={60}
               src={detailFoto}
               alt="Een zuurdesembrood met hartjes van bloem op de korst"
               width={360}
               class="aspect-[3/4] w-full object-cover"
             />
           </figure>
-          <p
-            class="font-hand text-notenhout absolute -bottom-14 left-32 hidden rotate-[-3deg] text-xl sm:left-36 sm:block"
-          >
+          <p class="font-hand text-notenhout absolute -bottom-14 left-32 hidden rotate-[-3deg] text-xl sm:left-36 sm:block">
             ← met hartjes van bloem
           </p>
         </div>
@@ -90,17 +106,13 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
 
   <div class="border-linnen bg-meel-warm border-y">
     <Container size="breed">
-      <ul
-        class="grid grid-cols-2 gap-x-4 gap-y-3 py-5 text-xs font-medium tracking-[0.06em] uppercase sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-10 sm:text-sm"
-      >
-        {
-          usps.map((usp) => (
-            <li class="flex items-center gap-2.5">
-              <HeartIcon class="text-roest size-3.5" />
-              {usp}
-            </li>
-          ))
-        }
+      <ul class="grid grid-cols-2 gap-x-4 gap-y-3 py-5 text-xs font-medium tracking-[0.06em] uppercase sm:flex sm:flex-wrap sm:items-center sm:justify-between sm:gap-x-10 sm:text-sm">
+        {usps.map((usp) => (
+          <li class="flex items-center gap-2.5">
+            <HeartIcon class="text-roest size-3.5" />
+            {usp}
+          </li>
+        ))}
       </ul>
     </Container>
   </div>
@@ -114,10 +126,14 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
           tijd.
         </p>
       </Heading>
-      <Button href="/broden" variant="secundair" class="shrink-0">Alle broden en prijzen</Button>
+      <Button href="/broden" variant="secundair" class="shrink-0">
+        Alle broden en prijzen
+      </Button>
     </div>
     <div class="mt-14 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-      {broden.map((brood) => <BroodKaart brood={brood} />)}
+      {broden.map((brood) => (
+        <BroodKaart brood={brood} />
+      ))}
       <div
         class="border-roest/30 flex flex-col items-center justify-center rounded-[var(--radius-kaart)] border border-dashed p-8 text-center sm:col-span-2 lg:col-span-1"
         data-rijs
@@ -127,7 +143,9 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
         <p class="text-notenhout-zacht mt-2">
           Voeg pitten, zaden, rozijnen of hazelnoten toe. Vanaf {formatEuro(50)} per soort.
         </p>
-        <Button href="/bestellen" class="mt-6">Stel samen</Button>
+        <Button href="/bestellen" class="mt-6">
+          Stel samen
+        </Button>
       </div>
     </div>
   </Section>
@@ -164,16 +182,16 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
   <Section tone="warm" id="starter">
     <div class="grid items-center gap-12 md:grid-cols-2 md:gap-16">
       <div class="relative mx-auto w-full max-w-md" data-rijs>
-        <Image
+        <Picture
+          formats={['avif', 'webp']}
+          quality={60}
           src={starterFoto}
           alt="De zelfgekweekte zuurdesemstarter, zo actief dat hij over de rand van de glazen pot bruist"
           widths={[400, 640, 900]}
           sizes="(min-width: 768px) 28rem, 90vw"
           class="shadow-diep aspect-[4/5] w-full rounded-[var(--radius-kaart)] object-cover"
         />
-        <p
-          class="font-hand bg-meel shadow-zacht absolute -right-2 -bottom-6 rotate-[3deg] rounded-xl px-4 py-2 text-xl sm:-right-8"
-        >
+        <p class="font-hand bg-meel shadow-zacht absolute -right-2 -bottom-6 rotate-[3deg] rounded-xl px-4 py-2 text-xl sm:-right-8">
           zo blij is hij na het voeden ♡
         </p>
       </div>
@@ -181,39 +199,39 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
         <Heading eyebrow="Het hart van elk brood" title="Een starter, helemaal zelf gekweekt">
           <p>
             Alles begint bij de starter: een levend mengsel van meel en water vol natuurlijke gisten
-            en melkzuurbacteriën. Deze is vanaf de eerste dag zelf gekweekt en wordt dagelijks gevoed
-            en verzorgd.
+            en melkzuurbacteriën. Deze is vanaf de eerste dag zelf gekweekt en wordt dagelijks
+            gevoed en verzorgd.
           </p>
           <p class="mt-4">
-            Hij laat het brood rijzen én geeft het die typische, licht frisse smaak, de open kruim en
-            een korst die kraakt als je hem aansnijdt. Daar komt geen pakje gist aan te pas.
+            Hij laat het brood rijzen én geeft het die typische, licht frisse smaak, de open kruim
+            en een korst die kraakt als je hem aansnijdt. Daar komt geen pakje gist aan te pas.
           </p>
         </Heading>
-        <Button href="/ons-verhaal" variant="secundair" class="mt-8">Lees het hele verhaal</Button>
+        <Button href="/ons-verhaal" variant="secundair" class="mt-8">
+          Lees het hele verhaal
+        </Button>
       </div>
     </div>
   </Section>
 
   <!-- Reviews (verschijnt zodra er echte reviews zijn) -->
-  {
-    reviews.length > 0 && (
-      <Section id="reviews">
-        <Heading eyebrow="Wat anderen zeggen" title="Met liefde gegeten" align="midden" />
-        <ul class="mt-14 grid gap-6 md:grid-cols-3">
-          {reviews.map((r) => (
-            <li class="bg-meel-warm rounded-[var(--radius-kaart)] p-8" data-rijs>
-              <HeartIcon class="text-roest size-5" />
-              <blockquote class="mt-4 font-serif text-xl leading-snug">“{r.data.tekst}”</blockquote>
-              <p class="text-notenhout-zacht mt-5 text-sm">
-                {r.data.naam}
-                {r.data.plaats && `, ${r.data.plaats}`}
-              </p>
-            </li>
-          ))}
-        </ul>
-      </Section>
-    )
-  }
+  {reviews.length > 0 && (
+    <Section id="reviews">
+      <Heading eyebrow="Wat anderen zeggen" title="Met liefde gegeten" align="midden" />
+      <ul class="mt-14 grid gap-6 md:grid-cols-3">
+        {reviews.map((r) => (
+          <li class="bg-meel-warm rounded-[var(--radius-kaart)] p-8" data-rijs>
+            <HeartIcon class="text-roest size-5" />
+            <blockquote class="mt-4 font-serif text-xl leading-snug">“{r.data.tekst}”</blockquote>
+            <p class="text-notenhout-zacht mt-5 text-sm">
+              {r.data.naam}
+              {r.data.plaats && `, ${r.data.plaats}`}
+            </p>
+          </li>
+        ))}
+      </ul>
+    </Section>
+  )}
 
   <!-- Zo werkt bestellen -->
   <Section id="bestellen-uitleg" class="border-linnen border-t">
@@ -228,9 +246,9 @@ const usps = ['Eigen starter', '100% natuurlijk', 'Langzaam gerezen', 'Met de ha
     <Heading eyebrow="Goed om te weten" title="Veelgestelde vragen" align="midden" />
     <FaqLijst items={faq} class="mt-12" />
     <p class="mt-10 text-center">
-      <a href="/veelgestelde-vragen" class="text-roest font-medium underline underline-offset-4"
-        >Alle vragen bekijken</a
-      >
+      <a href="/veelgestelde-vragen" class="text-roest font-medium underline underline-offset-4">
+        Alle vragen bekijken
+      </a>
     </p>
   </Section>
 

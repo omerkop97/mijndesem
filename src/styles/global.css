@@ -22,7 +22,6 @@
   --font-serif: 'Fraunces Variable', Georgia, 'Times New Roman', serif;
   --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
   --font-hand: 'Caveat', 'Segoe Script', cursive;
-  --font-script: 'Great Vibes', 'Segoe Script', cursive;
 
   /* Vormen en schaduwen */
   --radius-kaart: 1.25rem;
@@ -134,29 +133,28 @@
   }
 }
 
-/* Scroll-reveal: elementen met [data-rijs] verschijnen zacht bij in beeld komen */
-@layer components {
-  .js [data-rijs] {
+/* Scroll-reveal zonder JavaScript: [data-rijs] "rijst" zacht in beeld tijdens het scrollen.
+   Wat bij het laden al in beeld staat is direct zichtbaar (goed voor laadsnelheid en SEO).
+   Browsers zonder scroll-driven animations tonen alles gewoon, zonder animatie. */
+@keyframes rijs-in-beeld {
+  from {
     opacity: 0;
-    transform: translateY(14px) scale(0.985);
-    transition:
-      opacity 0.9s var(--ease-zacht),
-      transform 0.9s var(--ease-zacht);
+    transform: translateY(18px) scale(0.985);
   }
-  .js [data-rijs].is-zichtbaar {
-    opacity: 1;
-    transform: none;
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    [data-rijs] {
+      animation: rijs-in-beeld linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
   }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
-  }
-  .js [data-rijs] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
   }
   *,
   *::before,

@@ -1,5 +1,5 @@
 ---
-import { Image } from 'astro:assets';
+import { getImage, Picture } from 'astro:assets';
 import { render, type CollectionEntry } from 'astro:content';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import Container from '@/components/Container.astro';
@@ -14,6 +14,7 @@ import { getBroden } from '@/lib/catalogus';
 import { formatEuro } from '@/lib/prijs';
 import { allergeenLabels, sporenMelding } from '@/lib/allergenen';
 import { site } from '@/data/site';
+import { kruimelpad } from '@/lib/schema';
 
 export async function getStaticPaths() {
   const broden = await getBroden();
@@ -34,31 +35,51 @@ const productSchema = {
   '@type': 'Product',
   name: naam,
   description: kort,
+  image: new URL((await getImage({ src: foto, width: 1200, format: 'jpg' })).src, Astro.site).href,
   brand: { '@type': 'Brand', name: site.name },
   offers: {
     '@type': 'Offer',
     price: (prijs / 100).toFixed(2),
     priceCurrency: 'EUR',
     availability: 'https://schema.org/PreOrder',
+    seller: { '@id': new URL('/#bakkerij', Astro.site).href },
     url: new URL(`/broden/${brood.id}`, Astro.site).href,
   },
 };
 ---
 
-<BaseLayout title={naam} description={`${kort} ${formatEuro(prijs)}, ophalen in ${site.city}.`} image={foto}>
+<BaseLayout
+  title={`${naam} uit ${site.city}`}
+  description={`${kort} ${formatEuro(prijs)}, handgemaakt met eigen starter. Ophalen in ${site.city}.`}
+  image={foto}
+  imageAlt={fotoAlt}
+  schema={[
+    productSchema,
+    kruimelpad(Astro.site, [
+      { naam: 'Broden', pad: '/broden' },
+      { naam, pad: `/broden/${brood.id}` },
+    ]),
+  ]}
+>
   <Container size="breed" class="pt-8 pb-20 md:pt-12 md:pb-28">
     <nav aria-label="Kruimelpad" class="text-notenhout-zacht mb-8 text-sm">
-      <a href="/broden" class="hover:text-roest underline-offset-4 hover:underline">Broden</a>
-      <span class="mx-2" aria-hidden="true">/</span>
+      <a href="/broden" class="hover:text-roest underline-offset-4 hover:underline">
+        Broden
+      </a>
+      <span class="mx-2" aria-hidden="true">
+        /
+      </span>
       <span aria-current="page">{naam.replace(' Zuurdesem Brood', '')}</span>
     </nav>
 
     <div class="grid gap-12 lg:grid-cols-2 lg:gap-16">
-      <div data-rijs>
-        <Image
+      <div>
+        <Picture
+          formats={['avif', 'webp']}
+          quality={60}
           src={foto}
           alt={fotoAlt}
-          widths={[480, 720, 960, 1200]}
+          widths={[480, 720, 960]}
           sizes="(min-width: 1024px) 40vw, 90vw"
           class="shadow-diep aspect-[4/5] w-full rounded-t-full rounded-b-[var(--radius-kaart)] object-cover"
           loading="eager"
@@ -67,21 +88,31 @@ const productSchema = {
       </div>
 
       <div class="lg:pt-10">
-        <p class="font-hand text-roest text-2xl" data-rijs>{smaak.join(' · ')}</p>
-        <h1 class="mt-2 text-4xl sm:text-5xl" data-rijs>{naam}</h1>
-        <p class="mt-5 text-3xl font-medium tabular-nums" data-rijs>{formatEuro(prijs)}</p>
+        <p class="font-hand text-roest text-2xl">
+          {smaak.join(' · ')}
+        </p>
+        <h1 class="mt-2 text-4xl sm:text-5xl">
+          {naam}
+        </h1>
+        <p class="mt-5 text-3xl font-medium tabular-nums">
+          {formatEuro(prijs)}
+        </p>
 
-        <div class="text-notenhout-zacht mt-6 space-y-4 text-lg" data-rijs>
+        <div class="text-notenhout-zacht mt-6 space-y-4 text-lg">
           <Content />
         </div>
 
-        <div class="mt-9 flex flex-wrap gap-3" data-rijs>
-          <Button href={`/bestellen?brood=${brood.id}`} size="groot">Bestel dit brood</Button>
-          <Button href="#extras" variant="secundair" size="groot">Bekijk de extra's</Button>
+        <div class="mt-9 flex flex-wrap gap-3">
+          <Button href={`/bestellen?brood=${brood.id}`} size="groot">
+            Bestel dit brood
+          </Button>
+          <Button href="#extras" variant="secundair" size="groot">
+            Bekijk de extra's
+          </Button>
         </div>
         <BestelMoment class="mt-6" />
 
-        <dl class="border-notenhout/10 divide-notenhout/10 mt-12 divide-y border-y" data-rijs>
+        <dl class="border-notenhout/10 divide-notenhout/10 mt-12 divide-y border-y">
           <div class="grid gap-2 py-5 sm:grid-cols-3">
             <dt class="font-semibold">Ingrediënten</dt>
             <dd class="text-notenhout-zacht sm:col-span-2">
@@ -91,9 +122,13 @@ const productSchema = {
           <div class="grid gap-2 py-5 sm:grid-cols-3">
             <dt class="font-semibold">Allergenen</dt>
             <dd class="text-notenhout-zacht sm:col-span-2">
-              <span class="text-notenhout font-medium">{allergenen.map((a) => allergeenLabels[a]).join(', ')}.</span>
-              {' '}{sporenMelding}{' '}
-              <a href="/allergenen" class="text-roest underline underline-offset-4">Meer info</a>
+              <span class="text-notenhout font-medium">
+                {allergenen.map((a) => allergeenLabels[a]).join(', ')}.
+              </span>{' '}
+              {sporenMelding}{' '}
+              <a href="/allergenen" class="text-roest underline underline-offset-4">
+                Meer info
+              </a>
             </dd>
           </div>
           <div class="grid gap-2 py-5 sm:grid-cols-3">
@@ -120,9 +155,9 @@ const productSchema = {
       <h2 class="text-3xl">Ook lekker</h2>
     </div>
     <div class="mt-10 grid gap-x-6 gap-y-14 sm:grid-cols-2 lg:grid-cols-3">
-      {anderen.map((b) => <BroodKaart brood={b} />)}
+      {anderen.map((b) => (
+        <BroodKaart brood={b} />
+      ))}
     </div>
   </Section>
-
-  <script type="application/ld+json" set:html={JSON.stringify(productSchema)} />
 </BaseLayout>

@@ -94,7 +94,12 @@ export function regelOmschrijving(r: Regel, cat: Catalogus): { brood: string; ex
 }
 
 /** Leesbare samenvatting voor e-mail of WhatsApp. */
-export function bestelTekst(regels: Regel[], klant: Klant, cat: Catalogus, ophaaldagTekst: string): string {
+export function bestelTekst(
+  regels: Regel[],
+  klant: Klant,
+  cat: Catalogus,
+  ophaaldagTekst: string,
+): string {
   const lijnen = regels.map((r) => {
     const { brood, extras } = regelOmschrijving(r, cat);
     return `• ${r.aantal}× ${brood}${extras ? ` met ${extras.toLowerCase()}` : ''} (${formatEuro(regelPrijs(r, cat))})`;

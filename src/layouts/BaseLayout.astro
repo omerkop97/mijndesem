@@ -1,9 +1,8 @@
 ---
-import '@fontsource-variable/fraunces/full.css';
-import '@fontsource-variable/fraunces/full-italic.css';
+import '@fontsource-variable/fraunces/opsz.css';
+import '@fontsource-variable/fraunces/wght-italic.css';
 import '@fontsource-variable/inter';
 import '@fontsource/caveat/500.css';
-import '@fontsource/great-vibes';
 import '@/styles/global.css';
 
 import { getImage } from 'astro:assets';
@@ -16,14 +15,45 @@ interface Props {
   title?: string;
   description?: string;
   image?: ImageMetadata;
+  imageAlt?: string;
   noindex?: boolean;
+  /** Extra JSON-LD (schema.org) voor deze pagina */
+  schema?: Record<string, unknown>[];
 }
-const { title, description = site.description, image = ogFoto, noindex = false } = Astro.props;
+const {
+  title,
+  description = site.description,
+  image = ogFoto,
+  imageAlt = 'Handgemaakte zuurdesembroden van Mijn Desem in een rieten rijsmand',
+  noindex = false,
+  schema = [],
+} = Astro.props;
 
-const volleTitel = title ? `${title} · ${site.name}` : `${site.name} · Ambachtelijk zuurdesembrood uit ${site.city}`;
+const volleTitel = title
+  ? `${title} · ${site.name}`
+  : `${site.name} · Ambachtelijk zuurdesembrood uit ${site.city}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
-const og = await getImage({ src: image, width: 1200, height: 630, fit: 'cover', format: 'jpg' });
+const og = await getImage({
+  src: image,
+  width: 1200,
+  height: 630,
+  fit: 'cover',
+  format: 'jpg',
+  quality: 75,
+});
 const ogUrl = new URL(og.src, Astro.site);
+
+// Merkgegevens op elke pagina: wie is de organisatie achter de site
+const organisatie = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': new URL('/#organisatie', Astro.site).href,
+  name: site.name,
+  slogan: site.tagline,
+  url: new URL('/', Astro.site).href,
+  logo: new URL('/apple-touch-icon.png', Astro.site).href,
+  ...(site.instagram && { sameAs: [`https://instagram.com/${site.instagram}`] }),
+};
 ---
 
 <!doctype html>
@@ -50,39 +80,25 @@ const ogUrl = new URL(og.src, Astro.site);
     <meta property="og:image" content={ogUrl} />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={imageAlt} />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <script is:inline>
-      document.documentElement.classList.add('js');
-    </script>
+    <script type="application/ld+json" set:html={JSON.stringify(organisatie)} />
+    {schema.map((s) => (
+      <script type="application/ld+json" set:html={JSON.stringify(s)} />
+    ))}
   </head>
   <body class="flex min-h-dvh flex-col">
     <a
       href="#inhoud"
       class="bg-notenhout text-meel sr-only z-[100] rounded-full px-5 py-3 focus:not-sr-only focus:fixed focus:top-4 focus:left-4"
-      >Naar de inhoud</a
     >
+      Naar de inhoud
+    </a>
     <Header />
     <main id="inhoud" class="flex-1">
       <slot />
     </main>
     <Footer />
-
-    <script>
-      // Scroll-reveal: [data-rijs] elementen "rijzen" zacht in beeld.
-      const els = document.querySelectorAll<HTMLElement>('[data-rijs]');
-      const io = new IntersectionObserver(
-        (entries) => {
-          for (const e of entries) {
-            if (e.isIntersecting) {
-              e.target.classList.add('is-zichtbaar');
-              io.unobserve(e.target);
-            }
-          }
-        },
-        { rootMargin: '0px 0px -8% 0px', threshold: 0.1 },
-      );
-      els.forEach((el) => io.observe(el));
-    </script>
   </body>
 </html>

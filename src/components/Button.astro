@@ -39,7 +39,5 @@ const Tag = href ? 'a' : 'button';
 
 <Tag class:list={classes} href={href} type={href ? undefined : type} {...rest}>
   <slot />
-  <HeartIcon
-    class="size-0 opacity-0 transition-all duration-300 ease-(--ease-zacht) group-hover:size-3.5 group-hover:opacity-100"
-  />
+  <HeartIcon class="size-0 opacity-0 transition-all duration-300 ease-(--ease-zacht) group-hover:size-3.5 group-hover:opacity-100" />
 </Tag>

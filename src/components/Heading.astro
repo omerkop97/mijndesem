@@ -17,19 +17,17 @@ const sizes = {
 ---
 
 <div class:list={[align === 'midden' && 'mx-auto max-w-2xl text-center', className]}>
-  {
-    eyebrow && (
-      <p class="font-hand text-roest mb-2 text-2xl leading-none" data-rijs>
-        {eyebrow}
-      </p>
-    )
-  }
-  <Tag class={sizes[level]} data-rijs>{title}</Tag>
-  {
-    Astro.slots.has('default') && (
-      <div class="text-notenhout-zacht mt-5 text-lg" data-rijs>
-        <slot />
-      </div>
-    )
-  }
+  {eyebrow && (
+    <p class="font-hand text-roest mb-2 text-2xl leading-none" data-rijs>
+      {eyebrow}
+    </p>
+  )}
+  <Tag class={sizes[level]} data-rijs>
+    {title}
+  </Tag>
+  {Astro.slots.has('default') && (
+    <div class="text-notenhout-zacht mt-5 text-lg" data-rijs>
+      <slot />
+    </div>
+  )}
 </div>

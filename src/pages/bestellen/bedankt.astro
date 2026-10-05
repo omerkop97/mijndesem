@@ -14,24 +14,33 @@ import { site } from '@/data/site';
     <h1 class="mt-2 text-4xl sm:text-5xl">
       Je bestelling is binnen<span id="bedankt-naam"></span>
     </h1>
+    <!-- prettier-ignore -->
     <p class="text-notenhout-zacht mx-auto mt-6 max-w-lg text-lg">
       De starter wordt klaargezet voor jouw brood. Je hoort snel van ons om een ophaaltijd af te
       spreken; daarbij krijg je ook het adres in {site.city}<span id="tikkie-zin" class="hidden"> en een Tikkie</span>.
     </p>
 
     <div id="testmodus" class="bg-korst/15 mx-auto mt-8 hidden max-w-lg rounded-xl p-4 text-sm">
-      <strong>Testmodus:</strong> er is nog geen verzendkanaal (e-mail of WhatsApp) ingesteld, dus deze
-      bestelling is niet echt verstuurd.
+      <strong>Testmodus:</strong> er is nog geen verzendkanaal (e-mail of WhatsApp) ingesteld, dus
+      deze bestelling is niet echt verstuurd.
     </div>
 
-    <div id="samenvatting" class="bg-meel-warm mx-auto mt-10 hidden max-w-lg rounded-[var(--radius-kaart)] p-6 text-left sm:p-8">
+    <div
+      id="samenvatting"
+      class="bg-meel-warm mx-auto mt-10 hidden max-w-lg rounded-[var(--radius-kaart)] p-6 text-left sm:p-8"
+    >
       <h2 class="font-serif text-xl">Jouw bestelling</h2>
-      <pre id="samenvatting-tekst" class="text-notenhout-zacht mt-4 font-sans text-sm leading-relaxed whitespace-pre-wrap"></pre>
+      <pre
+        id="samenvatting-tekst"
+        class="text-notenhout-zacht mt-4 font-sans text-sm leading-relaxed whitespace-pre-wrap"
+      ></pre>
     </div>
 
     <Divider class="text-roest/60 mt-14" />
     <div class="mt-10 flex flex-wrap justify-center gap-3">
-      <Button href="/" variant="secundair">Terug naar home</Button>
+      <Button href="/" variant="secundair">
+        Terug naar home
+      </Button>
       <Button href="/bestellen">Nog iets bestellen</Button>
     </div>
   </Container>
