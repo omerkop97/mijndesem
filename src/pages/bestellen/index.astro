@@ -8,7 +8,7 @@ import HeartIcon from '@/components/HeartIcon.astro';
 import { getBroden, getExtrasInfo } from '@/lib/catalogus';
 import { formatEuro, formatMeerprijs } from '@/lib/prijs';
 import { MAX_AANTAL, type Catalogus } from '@/lib/mandje';
-import { bestelKanaal, site } from '@/data/site';
+import { site } from '@/data/site';
 
 const broden = await getBroden();
 const extras = await getExtrasInfo();
@@ -17,7 +17,6 @@ const catalogus: Catalogus = {
   extras: extras.map(({ id, naam, prijs, combineert }) => ({ id, naam, prijs, combineert })),
 };
 const config = {
-  web3formsKey: bestelKanaal.web3formsKey,
   whatsapp: site.whatsapp,
   dev: import.meta.env.DEV,
 };
@@ -193,11 +192,19 @@ const veld =
     </aside>
 
     <!-- Stap 4: gegevens -->
+    <!-- Netlify Forms: herkent dit formulier bij het deployen (data-netlify) en mailt elke inzending -->
     <form
       id="bestelformulier"
+      name="bestelling"
+      method="POST"
+      data-netlify="true"
+      netlify-honeypot="botcheck"
       class="border-linnen space-y-6 border-t pt-12 lg:col-span-7 lg:row-start-2"
       novalidate
     >
+      <input type="hidden" name="form-name" value="bestelling" />
+      <input type="hidden" name="bestelling" />
+      <input type="hidden" name="totaal" />
       <h2 class={stapKop}>
         <span class={stapNr}>4</span>Jouw gegevens
       </h2>
@@ -271,8 +278,10 @@ const veld =
         ></textarea>
       </label>
 
-      <!-- Honeypot tegen spam -->
-      <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+      <!-- Honeypot tegen spam: mensen zien dit veld niet, bots vullen het in -->
+      <p class="hidden" aria-hidden="true">
+        <label>Niet invullen <input name="botcheck" tabindex="-1" autocomplete="off" /></label>
+      </p>
 
       <!-- prettier-ignore -->
       <p class="text-notenhout-zacht text-sm">
@@ -290,13 +299,13 @@ const veld =
         >
           Plaats bestelling
         </button>
-        {config.whatsapp && config.web3formsKey && (
+        {config.whatsapp && (
           <button
             id="via-whatsapp"
             type="button"
-            class="text-roest font-medium underline underline-offset-4"
+            class="text-roest hidden font-medium underline underline-offset-4"
           >
-            of verstuur via WhatsApp
+            Verstuur via WhatsApp
           </button>
         )}
       </div>
@@ -326,7 +335,7 @@ const veld =
   } from '@/lib/mandje';
 
   const cat: Catalogus = JSON.parse(document.getElementById('catalogus')!.textContent!);
-  const config: { web3formsKey: string; whatsapp: string; dev: boolean } = JSON.parse(
+  const config: { whatsapp: string; dev: boolean } = JSON.parse(
     document.getElementById('bestel-config')!.textContent!,
   );
 
@@ -522,7 +531,6 @@ const veld =
 
   formulier.addEventListener('submit', async (e) => {
     e.preventDefault();
-    if ((formulier.elements.namedItem('botcheck') as HTMLInputElement).checked) return;
     const klant = controleer();
     if (!klant) return;
     const tekst = bestelTekst(
@@ -532,43 +540,36 @@ const veld =
       formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`)),
     );
 
-    if (config.web3formsKey) {
-      const knop = $<HTMLButtonElement>('verstuur');
-      knop.disabled = true;
-      knop.textContent = 'Bezig met versturen…';
-      try {
-        const res = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-          body: JSON.stringify({
-            access_key: config.web3formsKey,
-            subject: `Bestelling ${klant.naam}, ophalen ${klant.ophaaldag}`,
-            from_name: 'Mijn Desem website',
-            replyto: klant.email,
-            name: klant.naam,
-            email: klant.email,
-            message: tekst,
-          }),
-        });
-        const data = await res.json().catch(() => ({}));
-        if (!res.ok || data.success === false) throw new Error(data.message || res.statusText);
-        afronden(klant, tekst);
-      } catch {
-        knop.disabled = false;
-        knop.textContent = 'Plaats bestelling';
-        toonMelding(
-          config.whatsapp
-            ? 'Versturen lukte niet. Probeer het opnieuw, of verstuur je bestelling via WhatsApp.'
-            : 'Versturen lukte niet. Controleer je internetverbinding en probeer het opnieuw.',
-        );
-      }
-    } else if (config.whatsapp) {
-      viaWhatsApp(klant, tekst);
-    } else if (config.dev) {
-      console.info('[testmodus] Bestelling (nog geen verzendkanaal ingesteld):\n\n' + tekst);
+    // Lokaal (npm run dev) bestaat Netlify Forms niet: testmodus
+    if (config.dev) {
+      console.info('[testmodus] Bestelling, zou naar Netlify Forms gaan:\n\n' + tekst);
       afronden(klant, tekst, true);
-    } else {
-      toonMelding('Online bestellen is tijdelijk niet beschikbaar. Neem contact met ons op.');
+      return;
+    }
+
+    const knop = $<HTMLButtonElement>('verstuur');
+    knop.disabled = true;
+    knop.textContent = 'Bezig met versturen…';
+    try {
+      const data = new FormData(formulier);
+      data.set('bestelling', tekst);
+      data.set('totaal', formatEuro(totaal(mandje, cat)));
+      const res = await fetch('/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
+      });
+      if (!res.ok) throw new Error(res.statusText);
+      afronden(klant, tekst);
+    } catch {
+      knop.disabled = false;
+      knop.textContent = 'Plaats bestelling';
+      document.getElementById('via-whatsapp')?.classList.remove('hidden');
+      toonMelding(
+        config.whatsapp
+          ? 'Versturen lukte niet. Probeer het opnieuw, of verstuur je bestelling via WhatsApp.'
+          : 'Versturen lukte niet. Controleer je internetverbinding en probeer het opnieuw.',
+      );
     }
   });
 

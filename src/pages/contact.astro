@@ -1,10 +1,8 @@
 ---
-import { Picture } from 'astro:assets';
 import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaginaKop from '@/components/PaginaKop.astro';
 import Container from '@/components/Container.astro';
 import Button from '@/components/Button.astro';
-import foto from '@/assets/photos/twee-broden-rijsmand-tuin.jpg';
 import { site } from '@/data/site';
 
 const kanalen = [
@@ -20,19 +18,22 @@ const kanalen = [
     href: `https://instagram.com/${site.instagram}`,
   },
 ].filter(Boolean) as { label: string; waarde: string; href: string }[];
+
+const veld =
+  'border-notenhout/15 bg-meel focus:border-roest focus:ring-roest/20 mt-1.5 block w-full rounded-xl border px-4 py-3 outline-none focus:ring-4';
 ---
 
 <BaseLayout
   title="Contact"
-  description={`Neem contact op met Mijn Desem, thuisbakkerij in ${site.city}.`}
+  description={`Neem contact op met Mijn Desem, thuisbakkerij in ${site.city}. Via WhatsApp of het contactformulier.`}
 >
   <PaginaKop eyebrow="Zeg het maar" titel="Contact">
     <p>Een vraag, een speciaal verzoek of een grote bestelling? Ik hoor graag van je.</p>
   </PaginaKop>
 
-  <Container class="grid gap-12 pb-24 md:grid-cols-2 md:items-center">
+  <Container class="grid gap-12 pb-24 md:grid-cols-2">
     <div class="space-y-8">
-      {kanalen.length > 0 ? (
+      {kanalen.length > 0 && (
         <ul class="space-y-4">
           {kanalen.map((k) => (
             <li>
@@ -56,10 +57,6 @@ const kanalen = [
             </li>
           ))}
         </ul>
-      ) : (
-        <p class="bg-meel-warm rounded-[var(--radius-kaart)] p-6">
-          Contactgegevens volgen binnenkort.
-        </p>
       )}
 
       <dl class="border-notenhout/10 divide-notenhout/10 divide-y border-y">
@@ -82,14 +79,46 @@ const kanalen = [
       </Button>
     </div>
 
-    <Picture
-      formats={['avif', 'webp']}
-      quality={60}
-      src={foto}
-      alt="Twee zuurdesembroden in een rieten rijsmand, buiten in de zon"
-      widths={[400, 640, 900]}
-      sizes="(min-width: 768px) 45vw, 90vw"
-      class="shadow-diep mx-auto aspect-[4/5] w-full max-w-md rounded-t-full rounded-b-[var(--radius-kaart)] object-cover"
-    />
+    <!-- Netlify Forms: werkt zonder JavaScript; na verzenden naar /contact/verzonden -->
+    <form
+      name="contact"
+      method="POST"
+      action="/contact/verzonden"
+      data-netlify="true"
+      netlify-honeypot="botcheck"
+      class="bg-meel-warm shadow-zacht space-y-5 rounded-[var(--radius-kaart)] p-6 sm:p-8"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      <p class="hidden" aria-hidden="true">
+        <label>
+          Niet invullen <input name="botcheck" tabindex="-1" autocomplete="off" />
+        </label>
+      </p>
+      <h2 class="font-serif text-2xl">Stuur een bericht</h2>
+      <label class="block">
+        <span class="text-sm font-medium">Naam</span>
+        <input name="naam" required autocomplete="name" class={veld} />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium">E-mailadres</span>
+        <input name="email" type="email" required autocomplete="email" class={veld} />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium">
+          Telefoon <span class="text-notenhout-zacht font-normal">(optioneel)</span>
+        </span>
+        <input name="telefoon" type="tel" autocomplete="tel" class={veld} />
+      </label>
+      <label class="block">
+        <span class="text-sm font-medium">Bericht</span>
+        <textarea name="bericht" rows="5" required class={veld}></textarea>
+      </label>
+      <button
+        type="submit"
+        class="bg-roest text-meel hover:bg-roest-donker shadow-zacht inline-flex h-12 items-center rounded-full px-7 font-medium transition-colors"
+      >
+        Versturen
+      </button>
+    </form>
   </Container>
 </BaseLayout>

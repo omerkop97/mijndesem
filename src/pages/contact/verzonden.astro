@@ -1,0 +1,23 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Container from '@/components/Container.astro';
+import Button from '@/components/Button.astro';
+import HeartIcon from '@/components/HeartIcon.astro';
+---
+
+<BaseLayout title="Bericht verzonden" noindex>
+  <Container size="smal" class="py-24 text-center md:py-32">
+    <HeartIcon class="text-roest animate-rijzen mx-auto size-10" />
+    <p class="font-hand text-roest mt-6 text-2xl">Dankjewel</p>
+    <h1 class="mt-2 text-4xl sm:text-5xl">Je bericht is verstuurd</h1>
+    <p class="text-notenhout-zacht mx-auto mt-5 max-w-md text-lg">
+      Ik reageer zo snel mogelijk, meestal binnen een dag.
+    </p>
+    <div class="mt-9 flex flex-wrap justify-center gap-3">
+      <Button href="/broden">Bekijk de broden</Button>
+      <Button href="/" variant="secundair">
+        Naar home
+      </Button>
+    </div>
+  </Container>
+</BaseLayout>

@@ -1,0 +1,31 @@
+# Netlify-configuratie voor Mijn Desem (statische Astro-site + Netlify Forms)
+
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# Beveiligingsheaders voor alle pagina's
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    X-Frame-Options = "DENY"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+    Strict-Transport-Security = "max-age=31536000; includeSubDomains"
+
+# Gebouwde assets hebben een hash in de bestandsnaam: mogen een jaar in de cache
+[[headers]]
+  for = "/_astro/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# www → zonder www (domein instellen in Netlify: mijndesem.nl als primair domein)
+[[redirects]]
+  from = "https://www.mijndesem.nl/*"
+  to = "https://mijndesem.nl/:splat"
+  status = 301
+  force = true

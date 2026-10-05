@@ -174,7 +174,7 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [x] 4.3 Bestelformulier: naam, e-mail, telefoon (WhatsApp), ophaaldag, voorkeurstijd (optioneel, "in overleg"), betaalwijze (Tikkie / contant), opmerking.
 - [x] 4.4 Datumkiezer: wie vóór 00:00 bestelt op dag D, kan ophalen vanaf D+3 (in Nederlandse tijd, Europe/Amsterdam), gecontroleerd in de browser.
 - [ ] 4.7 Later: dichte dagen/vakantie blokkeren en een server-side check (vereist een serverless functie, zie fase 7).
-- [ ] 4.5 Verzending naar de bakker: code klaar (e-mail via Web3Forms en/of WhatsApp). **Nog nodig: sleutel en/of WhatsApp-nummer.** Bevestiging voor de klant = bedankpagina met samenvatting (automatische mail vereist betaald Web3Forms-plan of eigen functie in fase 7).
+- [x] 4.5 Verzending: Netlify Forms (e-mailmelding instellen in Netlify) + daarna optioneel via WhatsApp (06-39033748) met ingevulde bestelling.
 - [x] 4.6 Bedankpagina met afhaalinformatie.
 
 ### Fase 5: Polish en kwaliteit
@@ -185,7 +185,7 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [ ] 5.5 Testen op iPhone, Android en desktop (Safari, Chrome, Firefox).
 
 ### Fase 6: Livegang
-- [ ] 6.1 Deploy op Netlify/Cloudflare Pages en domein koppelen.
+- [ ] 6.1 Deploy op Netlify (netlify.toml staat klaar) en domein koppelen. Code staat op github.com/omerkop97/mijndesem.
 - [ ] 6.2 Analytics (Plausible/Umami).
 - [ ] 6.3 Google Bedrijfsprofiel aanmaken en koppelen.
 - [ ] 6.4 Testbestelling end-to-end.

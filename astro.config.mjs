@@ -8,7 +8,8 @@ export default defineConfig({
   site: 'https://mijndesem.nl',
   integrations: [
     sitemap({
-      filter: (page) => !['/stijlgids', '/bestellen/bedankt'].some((p) => page.includes(p)),
+      filter: (page) =>
+        !['/stijlgids', '/bestellen/bedankt', '/contact/verzonden'].some((p) => page.includes(p)),
     }),
   ],
   // CSS (±17 kB) direct in de HTML: scheelt een render-blocking request op mobiel

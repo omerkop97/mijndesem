@@ -5,19 +5,14 @@ export const site = {
   description:
     'Handgemaakt zuurdesembrood uit Zevenaar. Gebakken met een eigen starter, langzaam gerezen en 100% natuurlijk.',
   city: 'Zevenaar',
-  // TODO: invullen zodra bekend
-  whatsapp: '' as string, // bijv. '31612345678'
+  // TODO: invullen zodra bekend.
+  // Bestellingen en contactberichten gaan via Netlify Forms (e-mailmelding instellen in Netlify).
+  // Met een WhatsApp-nummer kan de klant de bestelling daarna ook via WhatsApp sturen.
+  whatsapp: '31639033748' as string, // internationaal zonder + of 0 (06-39033748)
   email: '' as string,
   instagram: '' as string,
   kvk: '' as string,
 } as const;
-
-// Waar bestellingen naartoe gaan. Zie .env.example.
-// - PUBLIC_WEB3FORMS_KEY: bestelling komt per e-mail binnen (gratis via web3forms.com)
-// - site.whatsapp: klant kan de bestelling ook als WhatsApp-bericht versturen
-export const bestelKanaal = {
-  web3formsKey: (import.meta.env.PUBLIC_WEB3FORMS_KEY ?? '') as string,
-};
 
 export const nav = [
   { href: '/broden', label: 'Broden' },
