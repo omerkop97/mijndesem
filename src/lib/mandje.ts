@@ -111,7 +111,7 @@ export function bestelTekst(
     '',
     `Totaal: ${formatEuro(totaal(regels, cat))}`,
     `Ophalen: ${ophaaldagTekst}${klant.voorkeurstijd ? `, voorkeur ${klant.voorkeurstijd}` : ''}`,
-    `Betalen: ${klant.betaalwijze === 'tikkie' ? 'via Tikkie' : 'contant bij ophalen'}`,
+    `Betalen bij ophalen: ${klant.betaalwijze === 'tikkie' ? 'Tikkie' : 'contant'}`,
     '',
     `Telefoon: ${klant.telefoon}`,
     `E-mail: ${klant.email}`,

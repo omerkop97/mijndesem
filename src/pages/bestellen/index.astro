@@ -34,7 +34,7 @@ const veld =
 
 <BaseLayout
   title="Bestellen"
-  description={`Stel je eigen zuurdesembrood samen en kies je ophaaldag. Ophalen in ${site.city}, betalen via Tikkie of contant.`}
+  description={`Stel je eigen zuurdesembrood samen en kies je ophaaldag. Ophalen in ${site.city}, betalen bij het ophalen (Tikkie of contant).`}
 >
   <PaginaKop eyebrow="Vers voor jou gebakken" titel="Stel je brood samen">
     <BestelMoment />
@@ -185,7 +185,7 @@ const veld =
           </li>
           <li class="flex gap-2">
             <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
-            Betalen via Tikkie of contant
+            Betalen bij het ophalen: Tikkie of contant
           </li>
         </ul>
       </div>
@@ -246,8 +246,8 @@ const veld =
         <legend class="text-sm font-medium">Hoe wil je betalen?</legend>
         <div class="mt-2 grid gap-3 sm:grid-cols-2">
           {[
-            { v: 'tikkie', t: 'Via Tikkie', s: 'Je ontvangt een betaalverzoek' },
-            { v: 'contant', t: 'Contant', s: 'Bij het ophalen' },
+            { v: 'tikkie', t: 'Tikkie', s: 'Betaalverzoek bij het ophalen' },
+            { v: 'contant', t: 'Contant', s: 'Graag gepast bij het ophalen' },
           ].map((o, i) => (
             <label class="border-notenhout/15 bg-meel has-[:checked]:border-roest has-[:checked]:bg-blush-zacht/40 has-[:focus-visible]:ring-roest/30 flex cursor-pointer items-start gap-3 rounded-xl border p-4 has-[:focus-visible]:ring-4">
               <input
