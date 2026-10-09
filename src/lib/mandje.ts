@@ -105,7 +105,7 @@ export function bestelTekst(
     return `• ${r.aantal}× ${brood}${extras ? ` met ${extras.toLowerCase()}` : ''} (${formatEuro(regelPrijs(r, cat))})`;
   });
   return [
-    `Nieuwe bestelling van ${klant.naam}`,
+    `Naam: ${klant.naam}`,
     '',
     ...lijnen,
     '',

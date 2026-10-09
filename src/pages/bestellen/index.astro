@@ -280,7 +280,9 @@ const veld =
 
       <!-- Honeypot tegen spam: mensen zien dit veld niet, bots vullen het in -->
       <p class="hidden" aria-hidden="true">
-        <label>Niet invullen <input name="botcheck" tabindex="-1" autocomplete="off" /></label>
+        <label>
+          Niet invullen <input name="botcheck" tabindex="-1" autocomplete="off" />
+        </label>
       </p>
 
       <!-- prettier-ignore -->
@@ -291,23 +293,20 @@ const veld =
 
       <div id="form-melding" class="hidden rounded-xl p-4 text-sm" role="alert"></div>
 
-      <div class="flex flex-wrap items-center gap-4">
+      <div>
         <button
           id="verstuur"
           type="submit"
-          class="bg-roest text-meel hover:bg-roest-donker shadow-zacht inline-flex h-13 items-center gap-2 rounded-full px-8 text-base font-medium transition-colors disabled:cursor-wait disabled:opacity-60"
+          class="shadow-zacht inline-flex h-13 items-center gap-2.5 rounded-full bg-[#1f8f4e] px-8 text-base font-medium text-white transition-colors hover:bg-[#187540]"
         >
-          Plaats bestelling
+          <svg class="size-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.3-.4.2-.4.7-1.3.1-.2 0-.3 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6.5-.1 1.5-.6 1.7-1.2.2-.6.2-1.1.2-1.2-.1-.1-.3-.2-.5-.3Z"></path>
+          </svg>
+          Bestel via WhatsApp
         </button>
-        {config.whatsapp && (
-          <button
-            id="via-whatsapp"
-            type="button"
-            class="text-roest hidden font-medium underline underline-offset-4"
-          >
-            Verstuur via WhatsApp
-          </button>
-        )}
+        <p class="text-notenhout-zacht mt-3 text-sm">
+          WhatsApp opent met je bestelling al ingevuld. Druk daar op verzenden en je bent klaar.
+        </p>
       </div>
     </form>
   </Container>
@@ -509,34 +508,22 @@ const veld =
     return klant;
   }
 
-  function afronden(klant: Klant, tekst: string, testmodus = false) {
+  /** Stille reservekopie in Netlify Forms, zodat een bestelling nooit zoekraakt. */
+  function bewaarKopie(tekst: string) {
+    if (config.dev) return; // lokaal bestaat Netlify Forms niet
     try {
-      sessionStorage.setItem(
-        'mijndesem-laatste-bestelling',
-        JSON.stringify({
-          tekst,
-          naam: klant.naam,
-          ophaaldag: klant.ophaaldag,
-          betaalwijze: klant.betaalwijze,
-          testmodus,
-        }),
-      );
+      const data = new FormData(formulier);
+      data.set('bestelling', tekst);
+      data.set('totaal', formatEuro(totaal(mandje, cat)));
+      const body = new URLSearchParams(data as unknown as Record<string, string>);
+      // sendBeacon blijft werken terwijl de pagina naar WhatsApp en de bedankpagina gaat
+      if (!navigator.sendBeacon?.('/', body)) {
+        fetch('/', { method: 'POST', body, keepalive: true }).catch(() => {});
+      }
     } catch {}
-    mandje = [];
-    bewaarMandje(mandje);
-    location.href = '/bestellen/bedankt';
   }
 
-  function viaWhatsApp(klant: Klant, tekst: string) {
-    window.open(
-      `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(tekst)}`,
-      '_blank',
-      'noopener',
-    );
-    afronden(klant, tekst);
-  }
-
-  formulier.addEventListener('submit', async (e) => {
+  formulier.addEventListener('submit', (e) => {
     e.preventDefault();
     const klant = controleer();
     if (!klant) return;
@@ -546,47 +533,22 @@ const veld =
       cat,
       formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`)),
     );
+    const bericht = `Hoi Mijn Desem! Ik wil graag bestellen:\n\n${tekst}`;
+    const waUrl = `https://wa.me/${config.whatsapp}?text=${encodeURIComponent(bericht)}`;
 
-    // Lokaal (npm run dev) bestaat Netlify Forms niet: testmodus
-    if (config.dev) {
-      console.info('[testmodus] Bestelling, zou naar Netlify Forms gaan:\n\n' + tekst);
-      afronden(klant, tekst, true);
-      return;
-    }
-
-    const knop = $<HTMLButtonElement>('verstuur');
-    knop.disabled = true;
-    knop.textContent = 'Bezig met versturen…';
+    bewaarKopie(tekst);
     try {
-      const data = new FormData(formulier);
-      data.set('bestelling', tekst);
-      data.set('totaal', formatEuro(totaal(mandje, cat)));
-      const res = await fetch('/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams(data as unknown as Record<string, string>).toString(),
-      });
-      if (!res.ok) throw new Error(res.statusText);
-      afronden(klant, tekst);
-    } catch {
-      knop.disabled = false;
-      knop.textContent = 'Plaats bestelling';
-      document.getElementById('via-whatsapp')?.classList.remove('hidden');
-      toonMelding(
-        config.whatsapp
-          ? 'Versturen lukte niet. Probeer het opnieuw, of verstuur je bestelling via WhatsApp.'
-          : 'Versturen lukte niet. Controleer je internetverbinding en probeer het opnieuw.',
+      sessionStorage.setItem(
+        'mijndesem-laatste-bestelling',
+        JSON.stringify({ tekst, waUrl, naam: klant.naam }),
       );
-    }
-  });
+    } catch {}
 
-  document.getElementById('via-whatsapp')?.addEventListener('click', () => {
-    const klant = controleer();
-    if (klant)
-      viaWhatsApp(
-        klant,
-        bestelTekst(mandje, klant, cat, formatDatum(new Date(`${klant.ophaaldag}T00:00:00Z`))),
-      );
+    // Direct in de klik openen, anders blokkeren telefoons het venster
+    window.open(waUrl, '_blank', 'noopener');
+    mandje = [];
+    bewaarMandje(mandje);
+    location.href = '/bestellen/bedankt';
   });
 
   werkRegelPrijsBij();

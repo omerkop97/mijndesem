@@ -11,7 +11,7 @@
     "volgorde": 2,
     "opHome": true,
     "vraag": "Hoe bestel ik?",
-    "antwoord": "Stel je brood samen op de bestelpagina, kies de dag waarop je het wilt ophalen en verstuur je bestelling. Je krijgt een bevestiging en we spreken samen een ophaaltijd af."
+    "antwoord": "Stel je brood samen op de bestelpagina, kies de dag waarop je het wilt ophalen en klik op \"Bestel via WhatsApp\". WhatsApp opent met je bestelling al ingevuld: druk op verzenden en we spreken daar samen een ophaaltijd af."
   },
   {
     "id": "ophalen",

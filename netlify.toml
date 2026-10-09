@@ -4,10 +4,6 @@
   command = "npm run build"
   publish = "dist"
 
-[functions]
-  # submission-created.mjs stuurt elke bestelling ook naar WhatsApp (zie uitleg in het bestand)
-  directory = "netlify/functions"
-
 [build.environment]
   NODE_VERSION = "22"
 
