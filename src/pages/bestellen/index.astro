@@ -482,9 +482,16 @@ const veld =
 
   function controleer(): Klant | null {
     melding.className = 'hidden';
+    // Niet op "Voeg toe" geklikt? Dan telt het brood dat in stap 1 t/m 3 is samengesteld.
     if (mandje.length === 0) {
-      toonMelding('Je bestelling is nog leeg. Voeg eerst een brood toe.');
-      return null;
+      const brood = gekozenBrood();
+      if (!brood) {
+        toonMelding('Kies eerst een brood in stap 1.');
+        return null;
+      }
+      mandje = voegToe(mandje, { brood, extras: gekozenExtras(), aantal: leesAantal() }, cat);
+      bewaarMandje(mandje);
+      toonMandje(true);
     }
     dagInput.min = isoDatum(eersteOphaaldag()); // opnieuw, voor wie over middernacht heen zat
     if (!formulier.checkValidity()) {
