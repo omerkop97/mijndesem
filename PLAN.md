@@ -252,5 +252,5 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 - [x] 8.4 Scrollverhaal "3 dagen": vastgepinde foto die per dag wisselt tijdens het scrollen.
 - [ ] 8.5 Handgetekende SVG-details (korstinsnijding, korenaar, bloemhartje) als terugkerend motief.
 - [x] 8.6 Footer met groot woordmerk; kleine typografische labels (small caps) door de hele site.
-- [ ] 8.7 Foto's: warme kleurcorrectie in één lijn; grootste winst blijft een echte fotoshoot (elk brood heel + aangesneden, zelfde ondergrond en licht).
+- [x] 8.7 Foto's: warme kleurcorrectie in één lijn (originelen in Foto's/); grootste winst blijft een echte fotoshoot (elk brood heel + aangesneden, zelfde ondergrond en licht).
 - [x] 8.8 Bestelpagina: meer "winkelervaring" (sticky totaal onderaan op mobiel, brood-preview).
