@@ -163,31 +163,68 @@ const veld =
       class="lg:col-span-5 lg:col-start-8 lg:row-span-2 lg:row-start-1"
       aria-labelledby="mandje-titel"
     >
-      <div class="bg-meel-warm shadow-zacht rounded-[var(--radius-kaart)] p-6 sm:p-8 lg:sticky lg:top-28">
-        <h2 id="mandje-titel" class="font-serif text-2xl">
-          Jouw bestelling
-        </h2>
-        <p id="mandje-leeg" class="text-notenhout-zacht mt-4">
-          Nog leeg. Kies een brood en voeg het toe.
-        </p>
-        <ul id="mandje-lijst" class="divide-notenhout/10 mt-4 divide-y" aria-live="polite"></ul>
-        <div
-          id="mandje-totaal"
-          class="border-notenhout/15 mt-2 hidden items-baseline justify-between border-t pt-4"
-        >
-          <span class="font-semibold">Totaal</span>
-          <span id="totaal-bedrag" class="text-2xl font-semibold tabular-nums"></span>
+      <div class="lg:sticky lg:top-28">
+        <!-- Live preview van het brood dat je samenstelt (desktop) -->
+        <div class="bg-meel shadow-zacht mb-5 hidden overflow-hidden rounded-[var(--radius-kaart)] lg:block">
+          <div class="bg-linnen relative aspect-[16/10]">
+            {broden.map((b, i) => (
+              <Picture
+                formats={['avif', 'webp']}
+                quality={60}
+                src={b.data.foto}
+                alt=""
+                widths={[480, 720]}
+                sizes="(min-width: 1024px) 30vw, 1px"
+                data-preview-foto={b.id}
+                class:list={[
+                  'absolute inset-0 size-full object-cover transition-opacity duration-500',
+                  i === 0 ? 'opacity-100' : 'opacity-0',
+                ]}
+              />
+            ))}
+          </div>
+          <div class="flex items-start justify-between gap-4 p-5">
+            <div>
+              <p class="label text-roest">Jouw brood</p>
+              <p id="preview-naam" class="mt-1.5 font-serif text-2xl leading-tight">
+                {broden[0].data.naam}
+              </p>
+              <p id="preview-extras" class="text-notenhout-zacht mt-1 text-sm">
+                naturel
+              </p>
+            </div>
+            <p id="preview-prijs" class="font-serif text-2xl tabular-nums">
+              {formatEuro(broden[0].data.prijs)}
+            </p>
+          </div>
         </div>
-        <ul class="text-notenhout-zacht mt-6 space-y-1.5 text-sm">
-          <li class="flex gap-2">
-            <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
-            Ophalen in {site.city}, tijd in overleg
-          </li>
-          <li class="flex gap-2">
-            <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
-            Betalen bij het ophalen: Tikkie of contant
-          </li>
-        </ul>
+
+        <div class="bg-meel-warm shadow-zacht rounded-[var(--radius-kaart)] p-6 sm:p-8">
+          <h2 id="mandje-titel" class="font-serif text-2xl">
+            Jouw bestelling
+          </h2>
+          <p id="mandje-leeg" class="text-notenhout-zacht mt-4">
+            Nog leeg. Voeg je brood toe, of ga meteen door naar je gegevens: dan nemen we het brood mee dat je hebt samengesteld.
+          </p>
+          <ul id="mandje-lijst" class="divide-notenhout/10 mt-4 divide-y" aria-live="polite"></ul>
+          <div
+            id="mandje-totaal"
+            class="border-notenhout/15 mt-2 hidden items-baseline justify-between border-t pt-4"
+          >
+            <span class="font-semibold">Totaal</span>
+            <span id="totaal-bedrag" class="text-2xl font-semibold tabular-nums"></span>
+          </div>
+          <ul class="text-notenhout-zacht mt-6 space-y-1.5 text-sm">
+            <li class="flex gap-2">
+              <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
+              Ophalen in {site.city}, tijd in overleg
+            </li>
+            <li class="flex gap-2">
+              <HeartIcon class="text-roest mt-1 size-3 shrink-0" />
+              Betalen bij het ophalen: Tikkie of contant
+            </li>
+          </ul>
+        </div>
       </div>
     </aside>
 
@@ -311,6 +348,44 @@ const veld =
     </form>
   </Container>
 
+  <!-- Ruimte zodat de vaste balk op mobiel niets afdekt -->
+  <div class="h-20 lg:hidden" aria-hidden="true"></div>
+
+  <!-- Vaste bestelbalk onderaan (mobiel) -->
+  <div
+    id="bestelbalk"
+    class="bg-notenhout text-meel fixed inset-x-0 bottom-0 z-40 translate-y-0 shadow-[0_-8px_30px_rgb(42_27_20/0.25)] transition-transform duration-300 lg:hidden [&.is-weg]:translate-y-full"
+  >
+    <div class="mx-auto flex max-w-xl items-center justify-between gap-4 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
+      <div class="min-w-0">
+        <p id="balk-label" class="label text-blush">
+          Jouw brood
+        </p>
+        <p id="balk-bedrag" class="font-serif text-2xl leading-tight tabular-nums">
+          {formatEuro(broden[0].data.prijs)}
+        </p>
+      </div>
+      <a
+        href="#bestelformulier"
+        id="balk-knop"
+        class="bg-meel text-notenhout inline-flex h-12 shrink-0 items-center gap-2 rounded-full px-6 font-medium"
+      >
+        Verder <span aria-hidden="true">→</span>
+      </a>
+    </div>
+  </div>
+
+  <!-- Melding na toevoegen -->
+  <div
+    id="toast"
+    role="status"
+    aria-live="polite"
+    class="bg-notenhout text-meel pointer-events-none fixed bottom-24 left-1/2 z-50 flex -translate-x-1/2 translate-y-4 items-center gap-2.5 rounded-full px-5 py-3 text-sm whitespace-nowrap opacity-0 shadow-lg transition-all duration-300 lg:bottom-8 [&.is-zichtbaar]:translate-y-0 [&.is-zichtbaar]:opacity-100"
+  >
+    <HeartIcon class="text-blush size-4" />
+    <span id="toast-tekst"></span>
+  </div>
+
   <script type="application/json" id="catalogus" set:html={JSON.stringify(catalogus)} />
   <script type="application/json" id="bestel-config" set:html={JSON.stringify(config)} />
 </BaseLayout>
@@ -364,10 +439,52 @@ const veld =
   function werkRegelPrijsBij() {
     const brood = cat.broden.find((b) => b.id === gekozenBrood());
     if (!brood) return;
-    $('regel-prijs').textContent = formatEuro(
-      prijsPerBrood(brood.prijs, gekozenExtras(), cat.extras) * leesAantal(),
+    const perBrood = prijsPerBrood(brood.prijs, gekozenExtras(), cat.extras);
+    $('regel-prijs').textContent = formatEuro(perBrood * leesAantal());
+
+    // Live preview (desktop)
+    document.querySelectorAll<HTMLElement>('[data-preview-foto]').forEach((f) => {
+      const aan = f.dataset.previewFoto === brood.id;
+      f.classList.toggle('opacity-100', aan);
+      f.classList.toggle('opacity-0', !aan);
+    });
+    const extraNamen = normaliseerExtras(gekozenExtras(), cat.extras).map(
+      (id) => cat.extras.find((e) => e.id === id)?.naam.toLowerCase() ?? id,
     );
+    $('preview-naam').textContent = `${leesAantal() > 1 ? `${leesAantal()}× ` : ''}${brood.naam}`;
+    $('preview-extras').textContent = extraNamen.length
+      ? `met ${extraNamen.join(', ')}`
+      : 'naturel';
+    $('preview-prijs').textContent = formatEuro(perBrood * leesAantal());
+    werkBalkBij();
   }
+
+  // ---------- Vaste bestelbalk (mobiel) en melding ----------
+  function werkBalkBij() {
+    const aantalBroden = mandje.reduce((s, r) => s + r.aantal, 0);
+    if (aantalBroden > 0) {
+      $('balk-label').textContent = `${aantalBroden} ${aantalBroden === 1 ? 'brood' : 'broden'}`;
+      $('balk-bedrag').textContent = formatEuro(totaal(mandje, cat));
+    } else {
+      $('balk-label').textContent = 'Jouw brood';
+      $('balk-bedrag').textContent = $('regel-prijs').textContent;
+    }
+  }
+
+  let toastTimer = 0;
+  function toonToast(tekst: string) {
+    $('toast-tekst').textContent = tekst;
+    $('toast').classList.add('is-zichtbaar');
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => $('toast').classList.remove('is-zichtbaar'), 2600);
+  }
+
+  // Balk verdwijnt zodra je bij je gegevens bent (daar staat de WhatsApp-knop)
+  new IntersectionObserver(
+    ([e]) =>
+      $('bestelbalk').classList.toggle('is-weg', e.isIntersecting || e.boundingClientRect.top < 0),
+    { rootMargin: '0px 0px -35% 0px' },
+  ).observe($('bestelformulier'));
 
   // Combi-regel zichtbaar maken: losse rozijnen + hazelnoten => combi, combi => losse uit.
   configurator.addEventListener('change', (e) => {
@@ -397,6 +514,7 @@ const veld =
     e.preventDefault();
     const brood = gekozenBrood();
     if (!brood) return;
+    const aantalToegevoegd = leesAantal();
     mandje = voegToe(mandje, { brood, extras: gekozenExtras(), aantal: leesAantal() }, cat);
     bewaarMandje(mandje);
     // Configurator terugzetten voor het volgende brood
@@ -405,10 +523,8 @@ const veld =
     $('combi-hint').classList.add('hidden');
     werkRegelPrijsBij();
     toonMandje(true);
-    // Op mobiel staat het mandje onder de configurator: laat zien dat het gelukt is
-    if (matchMedia('(max-width: 1023px)').matches) {
-      $('mandje-titel').scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
+    const naam = cat.broden.find((b) => b.id === brood)?.naam.replace(' Zuurdesem Brood', '');
+    toonToast(`Toegevoegd: ${aantalToegevoegd}× ${naam}`);
   });
 
   // ---------- Mandje ----------
@@ -444,6 +560,7 @@ const veld =
     $('mandje-totaal').classList.toggle('hidden', leeg);
     $('mandje-totaal').classList.toggle('flex', !leeg);
     $('totaal-bedrag').textContent = formatEuro(totaal(mandje, cat));
+    werkBalkBij();
   }
 
   // ---------- Ophaaldag ----------
