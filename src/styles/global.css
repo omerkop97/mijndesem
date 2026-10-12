@@ -32,6 +32,20 @@
   --ease-zacht: cubic-bezier(0.22, 1, 0.36, 1);
   --animate-rijzen: rijzen 0.9s var(--ease-zacht) both;
 
+  --animate-marquee: marquee 45s linear infinite;
+  --animate-draai: draai 28s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  @keyframes draai {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
   @keyframes rijzen {
     from {
       opacity: 0;
@@ -105,6 +119,15 @@
 
 /* Lopende tekst voor juridische en informatieve pagina's */
 @layer components {
+  /* Klein typografisch label (small caps-gevoel), o.a. boven koppen */
+  .label {
+    font-family: var(--font-sans);
+    font-size: 0.72rem;
+    font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+  }
+
   .tekst {
     color: var(--color-notenhout-zacht);
   }
@@ -155,6 +178,10 @@
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
+  }
+  .animate-marquee,
+  .animate-draai {
+    animation: none !important;
   }
   *,
   *::before,

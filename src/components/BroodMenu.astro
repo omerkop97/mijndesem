@@ -1,0 +1,120 @@
+---
+// De broden als bakkers-menukaart: naam ……… prijs. Op desktop wisselt de grote foto
+// mee met het brood waar je overheen beweegt (of naartoe tabt).
+import { Picture } from 'astro:assets';
+import type { CollectionEntry } from 'astro:content';
+import { formatEuro } from '@/lib/prijs';
+
+interface Props {
+  broden: CollectionEntry<'broden'>[];
+}
+const { broden } = Astro.props;
+const kort = (naam: string) => naam.replace(' Zuurdesem Brood', '');
+---
+
+<div class="grid gap-12 lg:grid-cols-12 lg:gap-16" data-menu>
+  <!-- Foto die meewisselt (alleen desktop) -->
+  <div class="hidden lg:col-span-5 lg:block">
+    <div class="sticky top-28">
+      <div class="bg-linnen shadow-diep relative aspect-[4/5] overflow-hidden rounded-t-full rounded-b-[var(--radius-kaart)]">
+        {broden.map((b, i) => (
+          <Picture
+            formats={['avif', 'webp']}
+            quality={60}
+            src={b.data.foto}
+            alt={b.data.fotoAlt}
+            widths={[480, 720, 960]}
+            sizes="(min-width: 1024px) 34vw, 1px"
+            data-menu-foto={b.id}
+            class:list={[
+              'absolute inset-0 size-full object-cover transition-[opacity,transform] duration-700 ease-(--ease-zacht)',
+              i === 0 ? 'scale-100 opacity-100' : 'scale-[1.04] opacity-0',
+            ]}
+          />
+        ))}
+      </div>
+      <p class="font-hand text-notenhout-zacht mt-4 text-center text-xl" data-menu-onderschrift>
+        {broden[0].data.smaak.join(' · ')}
+      </p>
+    </div>
+  </div>
+
+  <!-- De kaart -->
+  <div class="lg:col-span-7">
+    <ul class="border-notenhout/15 border-t">
+      {broden.map((b, i) => (
+        <li class="border-notenhout/15 border-b">
+          <a
+            href={`/broden/${b.id}`}
+            data-menu-item={b.id}
+            data-smaak={b.data.smaak.join(' · ')}
+            class:list={[
+              'group flex items-center gap-5 py-6 transition-colors sm:py-7',
+              i === 0 && 'is-actief',
+            ]}
+          >
+            <Picture
+              formats={['avif', 'webp']}
+              quality={60}
+              src={b.data.foto}
+              alt=""
+              width={160}
+              class="size-16 shrink-0 rounded-full object-cover sm:size-20 lg:hidden"
+            />
+            <span class="min-w-0 flex-1">
+              <span class="flex items-baseline gap-3">
+                <span class="group-hover:text-roest lg:group-[.is-actief]:text-roest font-serif text-[1.65rem] leading-tight transition-colors sm:text-4xl">
+                  {kort(b.data.naam)}
+                </span>
+                <span
+                  class="border-notenhout/30 hidden flex-1 translate-y-[-0.3em] border-b border-dotted sm:block"
+                  aria-hidden="true"
+                ></span>
+                <span class="ml-auto shrink-0 font-serif text-xl tabular-nums sm:ml-0 sm:text-2xl">
+                  {formatEuro(b.data.prijs)}
+                </span>
+              </span>
+              <span class="text-notenhout-zacht mt-1.5 block max-w-xl text-[0.95rem]">
+                {b.data.kort}
+              </span>
+            </span>
+            <span
+              class="text-roest hidden -translate-x-2 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:block"
+              aria-hidden="true"
+            >
+              →
+            </span>
+          </a>
+        </li>
+      ))}
+    </ul>
+    <p class="text-notenhout-zacht mt-6 text-sm">
+      Prijzen per brood. Extra's zoals pitten, zaden, rozijnen of hazelnoten vanaf
+      {' ' + formatEuro(50)} per soort.
+    </p>
+  </div>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-menu]').forEach((menu) => {
+    const fotos = menu.querySelectorAll<HTMLElement>('[data-menu-foto]');
+    const items = menu.querySelectorAll<HTMLElement>('[data-menu-item]');
+    const onderschrift = menu.querySelector<HTMLElement>('[data-menu-onderschrift]');
+    const toon = (id: string, bron: HTMLElement) => {
+      fotos.forEach((f) => {
+        const aan = f.dataset.menuFoto === id;
+        f.classList.toggle('opacity-100', aan);
+        f.classList.toggle('scale-100', aan);
+        f.classList.toggle('opacity-0', !aan);
+        f.classList.toggle('scale-[1.04]', !aan);
+      });
+      items.forEach((i) => i.classList.toggle('is-actief', i === bron));
+      if (onderschrift) onderschrift.textContent = bron.dataset.smaak ?? '';
+    };
+    items.forEach((item) => {
+      const id = item.dataset.menuItem!;
+      item.addEventListener('mouseenter', () => toon(id, item));
+      item.addEventListener('focus', () => toon(id, item));
+    });
+  });
+</script>

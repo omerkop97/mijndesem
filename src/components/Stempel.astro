@@ -1,0 +1,33 @@
+---
+// Rond, langzaam draaiend stempel met tekst rondom een hartje: het "zegel" van de bakkerij.
+import HeartIcon from './HeartIcon.astro';
+
+interface Props {
+  tekst?: string;
+  class?: string;
+}
+const { tekst = 'Puur ambacht · Mijn Desem · Zevenaar · ', class: className } = Astro.props;
+const uid = `stempel-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<div
+  class:list={[
+    'bg-meel text-notenhout shadow-diep grid size-28 place-items-center rounded-full sm:size-32',
+    // Positie komt van de aanroeper (bijv. "absolute ..."); anders relative voor de draaiende tekst
+    !className?.includes('absolute') && 'relative',
+    className,
+  ]}
+  aria-hidden="true"
+>
+  <svg viewBox="0 0 100 100" class="animate-draai absolute inset-0 size-full">
+    <defs>
+      <path id={uid} d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"></path>
+    </defs>
+    <text class="fill-current" style="font: 600 8.6px var(--font-sans); letter-spacing: 0.24em">
+      <textPath href={`#${uid}`} textLength="236">
+        {tekst.toUpperCase()}
+      </textPath>
+    </text>
+  </svg>
+  <HeartIcon class="text-roest size-6" />
+</div>

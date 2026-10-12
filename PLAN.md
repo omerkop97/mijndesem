@@ -246,9 +246,9 @@ Bewust **geen** Shopify/WooCommerce: dat is te zwaar en duur voor het huidige vo
 
 ## 11. Fase 8: World class design-upgrade (voorstel)
 
-- [ ] 8.1 Hero: editorial, full-bleed foto met grote serif-kop die over de foto valt + subtiele graan/papiertextuur.
-- [ ] 8.2 Bewegende strook (marquee): "Eigen starter · Langzaam gerezen · Met de hand gemaakt · Zevenaar".
-- [ ] 8.3 Broden als bakkers-menukaart: naam ........ prijs (stippellijn), met hover-foto per brood.
+- [x] 8.1 Hero: editorial, full-bleed foto met grote serif-kop die over de foto valt + subtiele graan/papiertextuur.
+- [x] 8.2 Bewegende strook (marquee): "Eigen starter · Langzaam gerezen · Met de hand gemaakt · Zevenaar".
+- [x] 8.3 Broden als bakkers-menukaart: naam ........ prijs (stippellijn), met hover-foto per brood.
 - [ ] 8.4 Scrollverhaal "3 dagen": vastgepinde foto die per dag wisselt tijdens het scrollen.
 - [ ] 8.5 Handgetekende SVG-details (korstinsnijding, korenaar, bloemhartje) als terugkerend motief.
 - [ ] 8.6 Footer met groot woordmerk; kleine typografische labels (small caps) door de hele site.

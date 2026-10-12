@@ -1,0 +1,31 @@
+---
+// Doorlopende band met kernwoorden. Inhoud staat er twee keer in voor een naadloze lus;
+// de tweede kopie is verborgen voor schermlezers.
+import HeartIcon from './HeartIcon.astro';
+
+interface Props {
+  items: string[];
+}
+const { items } = Astro.props;
+---
+
+<div class="bg-roest text-meel group relative overflow-hidden py-5 sm:py-6">
+  <p class="sr-only">{items.join(', ')}</p>
+  <div
+    class="animate-marquee flex w-max group-hover:[animation-play-state:paused]"
+    aria-hidden="true"
+  >
+    {[0, 1].map(() => (
+      <ul class="flex shrink-0 items-center">
+        {[...items, ...items].map((item) => (
+          <li class="flex items-center">
+            <span class="px-6 font-serif text-2xl whitespace-nowrap italic sm:px-9 sm:text-3xl">
+              {item}
+            </span>
+            <HeartIcon class="text-blush size-3.5 shrink-0" />
+          </li>
+        ))}
+      </ul>
+    ))}
+  </div>
+</div>
