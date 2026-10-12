@@ -1,5 +1,5 @@
 ---
-// Sectiekop: handgeschreven bovenregel, serif titel en optionele intro.
+// Sectiekop: typografisch label, grote serif titel en optionele intro.
 interface Props {
   eyebrow?: string;
   title: string;
@@ -11,14 +11,21 @@ const { eyebrow, title, level = 2, align = 'links', class: className } = Astro.p
 const Tag = `h${level}` as 'h1' | 'h2' | 'h3';
 const sizes = {
   1: 'text-4xl sm:text-5xl lg:text-6xl',
-  2: 'text-3xl sm:text-4xl lg:text-[2.75rem]',
+  2: 'text-[2.1rem] leading-[1.05] tracking-[-0.02em] sm:text-5xl lg:text-[3.4rem]',
   3: 'text-2xl sm:text-3xl',
 };
 ---
 
 <div class:list={[align === 'midden' && 'mx-auto max-w-2xl text-center', className]}>
   {eyebrow && (
-    <p class="font-hand text-roest mb-2 text-2xl leading-none" data-rijs>
+    <p
+      class:list={[
+        'label text-roest mb-5 flex items-center gap-3',
+        align === 'midden' && 'justify-center',
+      ]}
+      data-rijs
+    >
+      <span class="bg-roest/50 h-px w-8" aria-hidden="true"></span>
       {eyebrow}
     </p>
   )}

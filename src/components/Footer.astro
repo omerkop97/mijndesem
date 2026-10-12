@@ -1,7 +1,9 @@
 ---
+import { Image } from 'astro:assets';
 import Container from './Container.astro';
-import Logo from './Logo.astro';
-import Divider from './Divider.astro';
+import HeartIcon from './HeartIcon.astro';
+import woordmerk from '@/assets/brand/woordmerk.png';
+import brood from '@/assets/brand/brood-illustratie.png';
 import { nav, site } from '@/data/site';
 
 const jaar = new Date().getFullYear();
@@ -10,33 +12,32 @@ const juridisch = [
   { href: '/privacy', label: 'Privacy' },
   { href: '/voorwaarden', label: 'Voorwaarden' },
 ];
+const kop = 'label text-roest-donker mb-5';
 ---
 
-<footer class="bg-blush text-notenhout">
-  <Container size="breed" class="pt-16 pb-10 md:pt-20">
-    <div class="grid gap-12 md:grid-cols-12">
-      <div class="md:col-span-5">
-        <Logo />
-        <p class="text-notenhout/80 mt-5 max-w-sm">
-          Handgemaakt zuurdesembrood uit {site.city}. Met een eigen starter, langzaam gerezen en
-          zonder toevoegingen.
+<footer class="bg-blush text-notenhout overflow-hidden">
+  <Container size="breed" class="pt-16 md:pt-24">
+    <div class="grid gap-12 sm:grid-cols-2 lg:grid-cols-12">
+      <div class="sm:col-span-2 lg:col-span-4">
+        <p class="max-w-xs font-serif text-3xl leading-tight">
+          Handgemaakt zuurdesembrood, <em class="text-roest-donker">met liefde</em> gebakken in
+          {' ' + site.city}.
         </p>
-        <p class="font-hand text-roest-donker mt-4 text-2xl">{site.tagline}.</p>
       </div>
 
-      <div class="md:col-span-4">
-        <h2 class="mb-4 font-sans text-sm font-semibold tracking-[0.14em] uppercase">Bestellen</h2>
-        <ul class="text-notenhout/85 space-y-2">
-          <li>Minimaal 3 dagen vooruit bestellen</li>
-          <li>Elke dag van de week, maandag t/m zondag</li>
-          <li>Ophalen in {site.city}, tijd in overleg</li>
-          <li>Betalen bij het ophalen: Tikkie of contant</li>
+      <div class="lg:col-span-3">
+        <h2 class={kop}>Bestellen</h2>
+        <ul class="text-notenhout/85 space-y-2.5">
+          <li>Minimaal 3 dagen vooruit</li>
+          <li>Elke dag, maandag t/m zondag</li>
+          <li>Ophalen in {site.city}</li>
+          <li>Betalen bij ophalen: Tikkie of contant</li>
         </ul>
       </div>
 
-      <nav aria-label="Footermenu" class="md:col-span-3">
-        <h2 class="mb-4 font-sans text-sm font-semibold tracking-[0.14em] uppercase">Menu</h2>
-        <ul class="space-y-2">
+      <nav aria-label="Footermenu" class="lg:col-span-2">
+        <h2 class={kop}>Menu</h2>
+        <ul class="space-y-2.5">
           {[{ href: '/bestellen', label: 'Bestellen' }, ...nav].map((item) => (
             <li>
               <a
@@ -49,13 +50,54 @@ const juridisch = [
           ))}
         </ul>
       </nav>
+
+      {site.whatsapp && (
+        <div class="lg:col-span-3">
+          <h2 class={kop}>Contact</h2>
+          <a
+            href={`https://wa.me/${site.whatsapp}`}
+            target="_blank"
+            rel="noopener"
+            class="bg-meel/60 hover:bg-meel inline-flex items-center gap-2.5 rounded-full py-2.5 pr-5 pl-4 font-medium transition-colors"
+          >
+            <HeartIcon class="text-roest size-4" />
+            App ons via WhatsApp
+          </a>
+          <p class="text-notenhout/75 mt-3 text-sm">
+            Vragen of een grote bestelling? Zeg het maar.
+          </p>
+        </div>
+      )}
     </div>
+  </Container>
 
-    <Divider class="text-roest-donker/50 mt-14" />
+  <!-- Groot woordmerk als handtekening -->
+  <div class="mx-auto mt-16 flex max-w-[100rem] items-end gap-[2vw] px-4 sm:px-6 md:mt-24 lg:px-8">
+    <Image
+      src={brood}
+      alt=""
+      width={240}
+      densities={[1, 2]}
+      quality={70}
+      class="w-[13vw] max-w-40 shrink-0 translate-y-[6%] drop-shadow-md"
+    />
+    <Image
+      src={woordmerk}
+      alt={site.name}
+      widths={[480, 800, 1200]}
+      sizes="80vw"
+      quality={80}
+      class="h-auto w-full max-w-[64rem] opacity-90"
+    />
+  </div>
 
-    <div class="text-notenhout/85 mt-8 flex flex-col items-center justify-between gap-4 text-sm sm:flex-row">
+  <div class="border-notenhout/15 mt-10 border-t">
+    <Container
+      size="breed"
+      class="text-notenhout/85 flex flex-col items-center justify-between gap-4 py-6 text-sm sm:flex-row"
+    >
       <p>
-        {`© ${jaar} ${site.name}`}
+        {`© ${jaar} ${site.name} · ${site.tagline}`}
         {site.kvk && <span> · KvK {site.kvk}</span>}
       </p>
       <ul class="flex gap-5">
@@ -67,6 +109,6 @@ const juridisch = [
           </li>
         ))}
       </ul>
-    </div>
-  </Container>
+    </Container>
+  </div>
 </footer>

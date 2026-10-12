@@ -4,7 +4,7 @@ import BaseLayout from '@/layouts/BaseLayout.astro';
 import PaginaKop from '@/components/PaginaKop.astro';
 import Section from '@/components/Section.astro';
 import Heading from '@/components/Heading.astro';
-import ProcesTijdlijn from '@/components/ProcesTijdlijn.astro';
+import ProcesVerhaal from '@/components/ProcesVerhaal.astro';
 import HeartIcon from '@/components/HeartIcon.astro';
 import SluitCta from '@/components/SluitCta.astro';
 import foto from '@/assets/photos/hartjesbrood-rijsmand.jpg';
@@ -75,12 +75,7 @@ const waarden = [
     </div>
   </Section>
 
-  <Section tone="warm" id="proces">
-    <Heading eyebrow="Van starter tot brood" title="Drie dagen werk in elk brood" align="midden" />
-    <div class="mt-16">
-      <ProcesTijdlijn />
-    </div>
-  </Section>
+  <ProcesVerhaal />
 
   <Section>
     <div class="grid gap-14 lg:grid-cols-12">
